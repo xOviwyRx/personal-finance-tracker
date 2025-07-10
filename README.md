@@ -1,24 +1,21 @@
-# README
+# Personal Finance Tracker API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A Ruby on Rails API for tracking personal finances with budgets, categories, and transactions.
 
-Things you may want to cover:
+## Setup
 
-* Ruby version
+1. Clone the repository
+2. Install dependencies: `bundle install`
+3. Setup database: `rails db:create db:migrate`
+4. Run tests: `rspec`
+5. Start server: `rails server`
 
-* System dependencies
+## Tech Stack
 
-* Configuration
+- Ruby on Rails (API-only)
+- PostgreSQL
+- RSpec for testing
 
-* Database creation
+## Status
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+🚧 Work in Progress
