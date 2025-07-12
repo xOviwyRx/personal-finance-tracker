@@ -1,6 +1,7 @@
 class Api::V1::BudgetsController < ApplicationController
   def index
-    render json: { message: "Budgets API endpoint" }
+    budgets = current_user.budgets.includes(:category)
+    render json: budgets.as_json(include: {category: { only: [:id, :name] } })
   end
 
   def create
