@@ -14,6 +14,7 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 
 - Ruby on Rails (API-only)
 - PostgreSQL
+- Devise Authentication
 - RSpec for testing
 
 ## Status
