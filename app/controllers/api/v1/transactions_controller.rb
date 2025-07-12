@@ -4,6 +4,15 @@ class Api::V1::TransactionsController < ApplicationController
   end
 
   def create
-    render json: { message: "Create transaction endpoint" }
+    transaction = current_user.transactions.build(transaction_params)
+    if transaction.save
+      render json: transaction, status: :created
+    else
+      render json: { errors:transaction.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def transaction_params
+    params.require(:transaction).permit(:amount, :category_id, :title, :transaction_type)
   end
 end
