@@ -1,6 +1,6 @@
 class Api::V1::CategoriesController < ApplicationController
   def index
-    render json: { message: "Categories API endpoint" }
+    render json: current_user.categories
   end
 
   def create
