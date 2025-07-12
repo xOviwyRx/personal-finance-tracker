@@ -1,5 +1,5 @@
 class Api::V1::CategoriesController < ApplicationController
-  before_action :set_category, only: [:update]
+  before_action :set_category, only: [:update, :destroy]
   def index
     render json: current_user.categories
   end
@@ -23,6 +23,11 @@ class Api::V1::CategoriesController < ApplicationController
 
   def set_category
     @category = current_user.categories.find_by(id: params[:id])
+  end
+
+  def destroy
+    @category.destroy
+    head :no_content
   end
 
   def category_params
