@@ -21,13 +21,13 @@ class Api::V1::CategoriesController < ApplicationController
     end
   end
 
-  def set_category
-    @category = current_user.categories.find_by(id: params[:id])
-  end
-
   def destroy
     @category.destroy
     head :no_content
+  end
+
+  def set_category
+    @category = current_user.categories.find_by(id: params[:id])
   end
 
   def category_params
