@@ -27,9 +27,13 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 
 ### Budgets
 - `GET /api/v1/budgets` - List all budgets
-- `POST /api/v1/budgets` - Create a new budgets
-- `PUT /api/v1/budgets/:id` - Update a budgets
-- `DELETE /api/v1/budgets/:id` - Delete a budgets
+- `POST /api/v1/budgets` - Create a new budget
+- `PUT /api/v1/budgets/:id` - Update a budget
+- `DELETE /api/v1/budgets/:id` - Delete a budget
+
+### Transactions
+- `GET /api/v1/transactions` - List all transactions
+- `POST /api/v1/transactions` - Create a new transaction
 
 ## Status
 
@@ -37,4 +41,7 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 - ✅ User authentication (Devise)
 - ✅ Categories CRUD
 - ✅ Budgets CRUD
-- ⏳ Transactions CRUD
+- ✅ Transactions Create & Read
+- ✅ User associations and data scoping
+- ⏳ RSpec tests
+- ⏳ Ransack search functionality
