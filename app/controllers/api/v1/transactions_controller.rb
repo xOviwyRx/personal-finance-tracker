@@ -1,6 +1,6 @@
 class Api::V1::TransactionsController < ApplicationController
   def index
-    render json: { message: "Transactions API endpoint" }
+    render json: current_user.transactions
   end
 
   def create
