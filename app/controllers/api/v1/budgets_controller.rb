@@ -1,5 +1,5 @@
 class Api::V1::BudgetsController < ApplicationController
-  before_action :set_budget, only: [:update]
+  before_action :set_budget, only: [:update, :destroy]
   def index
     budgets = current_user.budgets.includes(:category)
     render json: budgets.as_json(include: {category: { only: [:id, :name] } })
@@ -20,6 +20,11 @@ class Api::V1::BudgetsController < ApplicationController
     else
       render json: { errors: @budget.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @budget.destroy
+    head :no_content
   end
 
   def set_budget
