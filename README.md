@@ -30,5 +30,5 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 🚧 Work in Progress
 - ✅ User authentication (Devise)
 - ✅ Categories CRUD
-- ⏳ Budgets CRUD
+- ✅ Budgets CRUD
 - ⏳ Transactions CRUD
