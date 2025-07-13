@@ -27,6 +27,8 @@ class Api::V1::BudgetsController < ApplicationController
     head :no_content
   end
 
+  private
+
   def set_budget
     @budget = current_user.budgets.find(params[:id])
   end
