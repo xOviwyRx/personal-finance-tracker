@@ -7,8 +7,10 @@ RSpec.describe Category, type: :model do
   end
 
   it 'is invalid without name' do
-    category = Category.new
+    user = User.create(email: 'test@example.com', password: 'password')
+    category = Category.new(user: user)
     expect(category).not_to be_valid
+    expect(category.errors[:name]).to include("can't be blank")
   end
 
   it 'has many transactions' do
