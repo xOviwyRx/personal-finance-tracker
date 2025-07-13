@@ -1,8 +1,6 @@
 class Api::V1::CategoriesController < ApplicationController
-  before_action :set_category, only: [:update, :destroy]
+  load_and_authorize_resource
   def index
-    @categories = current_user.categories
-
     if params[:q].present?
       @q = @categories.ransack(params[:q])
       @categories = @q.result
@@ -12,7 +10,6 @@ class Api::V1::CategoriesController < ApplicationController
   end
 
   def create
-    @category = current_user.categories.build(category_params)
     if @category.save
       render json: @category, status: :created
     else
@@ -34,10 +31,6 @@ class Api::V1::CategoriesController < ApplicationController
   end
 
   private
-
-  def set_category
-    @category = current_user.categories.find_by(id: params[:id])
-  end
 
   def category_params
     params.require(:category).permit(:name)
