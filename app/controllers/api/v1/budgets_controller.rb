@@ -1,12 +1,11 @@
 class Api::V1::BudgetsController < ApplicationController
-  before_action :set_budget, only: [:update, :destroy]
+  load_and_authorize_resource
   def index
-    @budgets = current_user.budgets.includes(:category)
+    @budgets = @budgets.includes(:category)
     render json: @budgets.as_json(include: {category: { only: [:id, :name] } })
   end
 
   def create
-    @budget = current_user.budgets.build(budget_params)
     if @budget.save
       render json: @budget, status: :created
     else
@@ -28,10 +27,6 @@ class Api::V1::BudgetsController < ApplicationController
   end
 
   private
-
-  def set_budget
-    @budget = current_user.budgets.find(params[:id])
-  end
 
   def budget_params
     params.require(:budget).permit(:monthly_limit, :category_id, :month)
