@@ -88,6 +88,8 @@ RSpec.describe "Api::V1::Users", type: :request do
       end
     end
   end
+
+  # Sign in
   describe "POST /api/v1/users/sign_in" do
     let!(:user) { User.create!(email: 'test@example.com', password: 'password') }
     context 'with valid credentials' do
@@ -133,6 +135,8 @@ RSpec.describe "Api::V1::Users", type: :request do
       end
     end
   end
+
+  # Sign out
   describe "DELETE /api/v1/users/sign_out" do
     before do
       # Sign in first
