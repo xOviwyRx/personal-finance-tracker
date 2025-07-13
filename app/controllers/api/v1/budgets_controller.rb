@@ -1,16 +1,16 @@
 class Api::V1::BudgetsController < ApplicationController
   before_action :set_budget, only: [:update, :destroy]
   def index
-    budgets = current_user.budgets.includes(:category)
-    render json: budgets.as_json(include: {category: { only: [:id, :name] } })
+    @budgets = current_user.budgets.includes(:category)
+    render json: @budgets.as_json(include: {category: { only: [:id, :name] } })
   end
 
   def create
-    budget = current_user.budgets.build(budget_params)
-    if budget.save
-      render json: budget, status: :created
+    @budget = current_user.budgets.build(budget_params)
+    if @budget.save
+      render json: @budget, status: :created
     else
-      render json: { errors: budget.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @budget.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
