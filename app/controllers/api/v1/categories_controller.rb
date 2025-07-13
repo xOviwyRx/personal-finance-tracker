@@ -33,6 +33,8 @@ class Api::V1::CategoriesController < ApplicationController
     head :no_content
   end
 
+  private
+
   def set_category
     @category = current_user.categories.find_by(id: params[:id])
   end
