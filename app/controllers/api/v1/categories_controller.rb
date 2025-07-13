@@ -1,7 +1,14 @@
 class Api::V1::CategoriesController < ApplicationController
   before_action :set_category, only: [:update, :destroy]
   def index
-    render json: current_user.categories
+    @categories = current_user.categories
+
+    if params[:q].present?
+      @q = @categories.ransack(params[:q])
+      @categories = @q.result
+    end
+
+    render json: @categories
   end
 
   def create
