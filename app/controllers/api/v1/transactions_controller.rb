@@ -4,11 +4,11 @@ class Api::V1::TransactionsController < ApplicationController
   end
 
   def create
-    transaction = current_user.transactions.build(transaction_params)
-    if transaction.save
-      render json: transaction, status: :created
+    @transaction = current_user.transactions.build(transaction_params)
+    if @transaction.save
+      render json: @transaction, status: :created
     else
-      render json: { errors:transaction.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors:@transaction.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
