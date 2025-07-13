@@ -1,10 +1,10 @@
 class Api::V1::TransactionsController < ApplicationController
+  load_and_authorize_resource
   def index
-    render json: current_user.transactions
+    render json: @transactions
   end
 
   def create
-    @transaction = current_user.transactions.build(transaction_params)
     if @transaction.save
       render json: @transaction, status: :created
     else
