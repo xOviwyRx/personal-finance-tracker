@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Api::V1::Users", type: :request do
   # Registration new user
-  describe "POST api/v1/users" do
+  describe "POST /api/v1/users" do
     let(:valid_attributes) do
       {
         user: {
@@ -88,5 +88,70 @@ RSpec.describe "Api::V1::Users", type: :request do
       end
     end
   end
+  describe "POST /api/v1/users/sign_in" do
+    let!(:user) { User.create!(email: 'test@example.com', password: 'password') }
+    context 'with valid credentials' do
+      let(:valid_credentials) do
+        {
+          user: {
+            email: 'test@example.com',
+            password: 'password'
+          }
+        }
+      end
 
+      it 'returns success status' do
+        post '/api/v1/users/sign_in', params: valid_credentials, as: :json
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns correct JSON structure' do
+        post '/api/v1/users/sign_in', params: valid_credentials, as: :json
+
+        json_response = JSON.parse(response.body)
+        expect(json_response['status']['code']).to eq(200)
+        expect(json_response['status']['message']).to eq('Logged in successfully.')
+        expect(json_response['data']['user']['email']).to eq('test@example.com')
+        expect(json_response['data']['user']['id']).to eq(user.id)
+      end
+    end
+    context 'with invalid credentials' do
+      it 'returns unauthorized status for wrong password' do
+        post '/api/v1/users/sign_in', params: {
+          user: { email: 'test@example.com', password: 'wrong' }
+        }, as: :json
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns unauthorized status for non-existent user' do
+        post '/api/v1/users/sign_in', params: {
+          user: { email: 'nonexistent@example.com', password: 'password' }
+        }, as: :json
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+  describe "DELETE /api/v1/users/sign_out" do
+    before do
+      # Sign in first
+      post '/api/v1/users/sign_in', params: {
+        user: { email: 'test@example.com', password: 'password' }
+      }, as: :json
+    end
+
+    it 'returns success status' do
+      delete '/api/v1/users/sign_out', as: :json
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'returns correct JSON structure' do
+      delete '/api/v1/users/sign_out', as: :json
+
+      json_response = JSON.parse(response.body)
+      expect(json_response['status']['code']).to eq(200)
+      expect(json_response['status']['message']).to eq('Logged out successfully.')
+    end
+  end
 end
