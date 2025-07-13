@@ -47,4 +47,13 @@ RSpec.describe "Api::V1::Categories", type: :request do
       expect(json_response['errors']).to include("Name has already been taken")
     end
   end
+
+  describe "PUT /api/v1/categories/:id" do
+    it 'updates the category successfully' do
+      put "/api/v1/categories/#{category1.id}", params: { category: { name: 'Updated Electronics' } }, as: :json
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body["name"]).to eq("Updated Electronics")
+      expect(category1.reload.name).to eq("Updated Electronics")
+    end
+  end
 end
