@@ -56,4 +56,11 @@ RSpec.describe "Api::V1::Categories", type: :request do
       expect(category1.reload.name).to eq("Updated Electronics")
     end
   end
+
+  describe "DELETE /api/v1/categories/:id" do
+    it 'deletes the category successfully' do
+      delete "/api/v1/categories/#{category1.id}"
+      expect(response).to have_http_status(:no_content)
+    end
+  end
 end
