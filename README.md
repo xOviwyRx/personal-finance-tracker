@@ -19,6 +19,11 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 
 ## API Endpoints
 
+### Authentication
+- `POST /api/v1/users` - Sign up
+- `POST /api/v1/users/sign_in` - Sign in
+- `DELETE /api/v1/users/sign_out` - Sign out
+
 ### Categories
 - `GET /api/v1/categories` - List all categories
 - `POST /api/v1/categories` - Create a new category
