@@ -50,4 +50,5 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 - ✅ User associations and data scoping
 - ✅ RSpec tests (Models)
 - ✅ RSpec tests (Requests: Users, Categories)
-- ⏳ Ransack search functionality
+- ✅ Ransack search functionality (Categories)
+- ⏳ CanCanCan
