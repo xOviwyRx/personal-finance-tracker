@@ -132,4 +132,24 @@ RSpec.describe "Api::V1::Budgets", type: :request do
       end
     end
   end
+
+  describe 'DELETE /api/v1/budgets/:id' do
+    it 'returns 401 when not authenticated' do
+      delete "/api/v1/budgets/#{budget1.id}"
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    context 'when authenticated' do
+      before do
+        post '/api/v1/users/sign_in', params: {
+          user: { email: 'test@example.com', password: 'password' }
+        }, as: :json
+      end
+
+      it 'returns status code 204' do
+        delete "/api/v1/budgets/#{budget1.id}"
+        expect(response).to  have_http_status(:no_content)
+      end
+    end
+  end
 end
