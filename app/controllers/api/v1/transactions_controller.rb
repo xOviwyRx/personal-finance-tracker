@@ -1,9 +1,12 @@
 class Api::V1::TransactionsController < ApplicationController
   load_and_authorize_resource
   def index
-    @q = @transactions.ransack(params[:q])
-    @transactions = @q.result.order(created_at: :desc)
+    if params[:q].present?
+      @q = @transactions.ransack(params[:q])
+      @transactions = @q.result
+    end
 
+    @transactions = @transactions.order(created_at: :desc)
     render json: @transactions
   end
 
