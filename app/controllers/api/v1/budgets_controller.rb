@@ -1,6 +1,11 @@
 class Api::V1::BudgetsController < ApplicationController
   load_and_authorize_resource
   def index
+    if params[:q].present?
+      @q = @budgets.ransack(params[:q])
+      @budgets = @q.result
+    end
+
     @budgets = @budgets.includes(:category)
     render json: @budgets.as_json(include: {category: { only: [:id, :name] } })
   end
