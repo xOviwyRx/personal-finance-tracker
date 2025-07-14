@@ -34,11 +34,33 @@ RSpec.describe "Api::V1::Budgets", type: :request do
         expect(response).to have_http_status(:success)
       end
 
-      it 'returns budgets' do
+      it 'returns all budgets without filter' do
         get '/api/v1/budgets'
 
         json_response = JSON.parse(response.body)
         expect(json_response.length).to eq(2)
+      end
+
+      it 'filters budgets by month' do
+        get '/api/v1/budgets?q[month_eq]=2023-01-01'
+
+        json_response = JSON.parse(response.body)
+        expect(json_response.length).to eq(1)
+        expect(json_response.first['month']).to eq('2023-01-01')
+      end
+
+      it 'filters budgets by category' do
+        other_category = Category.create!(name: 'Books', user: user)
+        Budget.create!(
+          user: user,
+          monthly_limit: '100',
+          category: other_category,
+          month: '2023-02-01'
+        )
+        get "/api/v1/budgets?q[category_id_eq]=#{category.id}"
+        json_response = JSON.parse(response.body)
+        expect(json_response.length).to eq(2)
+        expect(json_response.first['category_id']).to eq(category.id)
       end
     end
 
