@@ -36,4 +36,20 @@ RSpec.describe "Api::V1::Budgets", type: :request do
     end
 
   end
+
+  describe "POST /api/v1/budgets" do
+    it 'returns status code 201 and created budget' do
+      post '/api/v1/budgets', params: {
+        budget: {
+          category_id: category.id,
+          monthly_limit: '3000.0',
+          month: '2023-01-01'
+        }
+      }
+      # Debug the response
+      expect(response).to  have_http_status(:created)
+      json_response = JSON.parse(response.body)
+      expect(json_response['monthly_limit']).to eq('3000.0')
+    end
+  end
 end
