@@ -4,6 +4,7 @@ class Transaction < ApplicationRecord
 
   validates :amount, presence: true
   validates :transaction_type, presence: true, inclusion: { in: %w[income expense] }
+  validates :title, presence: true
 
   before_validation :set_default_date, on: :create
 
