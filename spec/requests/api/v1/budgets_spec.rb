@@ -49,6 +49,10 @@ RSpec.describe "Api::V1::Budgets", type: :request do
       expect(response).to  have_http_status(:created)
       json_response = JSON.parse(response.body)
       expect(json_response['monthly_limit']).to eq('3000.0')
+      expect(json_response['month']).to eq('2023-01-01')
+      expect(json_response).to have_key('id')
+      expect(json_response).to have_key('created_at')
+      expect(json_response['category_id']).to eq(category.id)
     end
 
     it 'returns status code 422 when category is missing' do
