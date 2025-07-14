@@ -23,12 +23,20 @@ RSpec.describe "Api::V1::Categories", type: :request do
         expect(response).to have_http_status(:ok)
       end
 
-      it 'returns categories' do
+      it 'returns all categories without filters' do
         get '/api/v1/categories'
 
         json_response = JSON.parse(response.body)
         expect(json_response.length).to eq(2)
         expect(json_response.first).to have_key('name')
+      end
+
+      it 'filters by name' do
+        get '/api/v1/categories?q[name_eq]=Electronics'
+
+        json_response = JSON.parse(response.body)
+        expect(json_response.length).to eq(1)
+        expect(json_response.first['name']).to eq('Electronics')
       end
     end
   end
