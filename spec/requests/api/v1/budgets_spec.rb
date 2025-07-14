@@ -94,4 +94,42 @@ RSpec.describe "Api::V1::Budgets", type: :request do
       end
     end
   end
+
+  describe "PUT /api/v1/budgets/:id" do
+    it 'returns 401 when not authenticated' do
+      put "/api/v1/budgets/#{budget1.id}", params: {
+        budget: {
+          category_id: category.id,
+          monthly_limit: '3000.0',
+          month: '2023-04-01'
+        }
+      }
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    context 'when authenticated' do
+      before do
+        post '/api/v1/users/sign_in', params: {
+          user: { email: 'test@example.com', password: 'password' }
+        }, as: :json
+      end
+
+      it 'returns status code 200 and updated budget' do
+        put "/api/v1/budgets/#{budget1.id}", params: {
+          budget: {
+            category_id: category.id,
+            monthly_limit: '4000.0',
+            month: '2023-01-01'
+          }
+        }
+        expect(response).to  have_http_status(:ok)
+        json_response = JSON.parse(response.body)
+        expect(json_response['monthly_limit']).to eq('4000.0')
+        expect(json_response['month']).to eq('2023-01-01')
+        expect(json_response).to have_key('id')
+        expect(Time.parse(json_response['updated_at'])).to be > Time.parse(json_response['created_at'])
+        expect(json_response['category_id']).to eq(category.id)
+      end
+    end
+  end
 end
