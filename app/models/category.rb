@@ -6,6 +6,6 @@ class Category < ApplicationRecord
     validates :name, uniqueness: { scope: :user_id }
 
     def self.ransackable_attributes(auth_object = nil)
-        %w[name created_at updated_at]
+        %w[name]
     end
 end
