@@ -31,7 +31,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
 
       it 'returns status code 200 and budgets' do
         get '/api/v1/budgets'
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:ok)
       end
 
       it 'returns all budgets without filter' do
