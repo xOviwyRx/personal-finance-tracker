@@ -113,6 +113,7 @@ RSpec.describe "Api::V1::Categories", type: :request do
       it 'deletes the category successfully' do
         delete "/api/v1/categories/#{category1.id}"
         expect(response).to have_http_status(:no_content)
+        expect(Category.find_by(id: category1.id)).to be_nil
       end
     end
   end

@@ -171,6 +171,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
       it 'returns status code 204' do
         delete "/api/v1/budgets/#{budget1.id}"
         expect(response).to  have_http_status(:no_content)
+        expect(Budget.find_by(id: budget1.id)).to be_nil
       end
     end
   end
