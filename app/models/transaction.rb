@@ -13,4 +13,8 @@ class Transaction < ApplicationRecord
   def set_default_date
     self.date ||= Date.current
   end
+
+  def self.ransackable_attributes(auth_object = nil)
+    %w[title amount date transaction_type]
+  end
 end
