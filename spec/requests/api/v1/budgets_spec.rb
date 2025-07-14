@@ -46,10 +46,24 @@ RSpec.describe "Api::V1::Budgets", type: :request do
           month: '2023-01-01'
         }
       }
-      # Debug the response
       expect(response).to  have_http_status(:created)
       json_response = JSON.parse(response.body)
       expect(json_response['monthly_limit']).to eq('3000.0')
     end
+
+    it 'returns status code 422 when category is missing' do
+      post '/api/v1/budgets', params: {
+        budget: {
+          monthly_limit: '3000.0',
+          month: '2023-01-01'
+        }
+      }
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      json_response = JSON.parse(response.body)
+      expect(json_response['errors']).to include("Category must exist")
+    end
+
+
   end
 end
