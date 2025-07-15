@@ -10,6 +10,16 @@ RSpec.describe Transaction, type: :model do
   end
 
   describe 'validations' do
+    it 'is invalid without title' do
+      transaction = Transaction.new(
+        user: user,
+        category: category,
+        transaction_type: 'income',
+        )
+      expect(transaction).not_to be_valid
+      expect(transaction.errors[:title]).to include("can't be blank")
+    end
+
     it 'is invalid without amount' do
       transaction = Transaction.new(
         user: user,
