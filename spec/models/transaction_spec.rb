@@ -5,7 +5,7 @@ RSpec.describe Transaction, type: :model do
   let(:category) { Category.create(name: 'Food', user: user) }
 
   it 'has amount' do
-    transaction = Transaction.new(amount: '10')
+    transaction = Transaction.new(amount: 10)
     expect(transaction.amount).to eq(10)
   end
 
@@ -23,7 +23,7 @@ RSpec.describe Transaction, type: :model do
       transaction = Transaction.new(
         user: user,
         category: category,
-        amount: '10',
+        amount: 10,
       )
       expect(transaction).not_to be_valid
     end
@@ -32,7 +32,7 @@ RSpec.describe Transaction, type: :model do
       transaction = Transaction.new(
         user: user,
         category: category,
-        amount: '10',
+        amount: 10,
         transaction_type: 'wrong type',
       )
       expect(transaction).not_to be_valid
@@ -78,7 +78,7 @@ RSpec.describe Transaction, type: :model do
     transaction = Transaction.create(
       user: user,
       category: category,
-      amount: '10',
+      amount: 10,
       transaction_type: 'income',
     )
     expect(transaction.date).to eq(Date.current)
