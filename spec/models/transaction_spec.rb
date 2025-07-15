@@ -14,9 +14,11 @@ RSpec.describe Transaction, type: :model do
       transaction = Transaction.new(
         user: user,
         category: category,
+        title: 'Roastbeef',
         transaction_type: 'income',
       )
       expect(transaction).not_to be_valid
+      expect(transaction.errors[:amount]).to include("can't be blank")
     end
 
     it 'is invalid without transaction_type' do
@@ -24,8 +26,10 @@ RSpec.describe Transaction, type: :model do
         user: user,
         category: category,
         amount: 10,
+        title: 'Roastbeef',
       )
       expect(transaction).not_to be_valid
+      expect(transaction.errors[:transaction_type]).to include("can't be blank")
     end
 
     it 'is invalid with wrong transaction type' do
@@ -34,8 +38,10 @@ RSpec.describe Transaction, type: :model do
         category: category,
         amount: 10,
         transaction_type: 'wrong type',
+        title: 'Roastbeef',
       )
       expect(transaction).not_to be_valid
+      expect(transaction.errors[:transaction_type]).to include("is not included in the list")
     end
 
     context 'category validations' do
@@ -62,6 +68,7 @@ RSpec.describe Transaction, type: :model do
           transaction_type: 'income',
           )
         expect(transaction).not_to be_valid
+        expect(transaction.errors[:category]).to include("must belong to the same user")
       end
     end
   end
@@ -80,6 +87,7 @@ RSpec.describe Transaction, type: :model do
       category: category,
       amount: 10,
       transaction_type: 'income',
+      title: 'Roastbeef',
     )
     expect(transaction.date).to eq(Date.current)
   end
