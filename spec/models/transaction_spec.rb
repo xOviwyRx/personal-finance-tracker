@@ -37,6 +37,33 @@ RSpec.describe Transaction, type: :model do
       )
       expect(transaction).not_to be_valid
     end
+
+    context 'category validations' do
+      let(:user2) { User.create(email: 'test2@example.com', password: 'password') }
+      let(:category2) { Category.create(name: 'Food', user: user2) }
+
+      it 'does create transaction with category of current user' do
+        transaction = Transaction.new(
+          user: user,
+          category: category,
+          amount: 10,
+          title: 'Roastbeef',
+          transaction_type: 'income',
+          )
+        expect(transaction).to be_valid
+      end
+
+      it 'does not create transaction with category of another user' do
+        transaction = Transaction.new(
+          user: user,
+          category: category2,
+          amount: 10,
+          title: 'Roastbeef',
+          transaction_type: 'income',
+          )
+        expect(transaction).not_to be_valid
+      end
+    end
   end
 
   it 'belongs to user' do
