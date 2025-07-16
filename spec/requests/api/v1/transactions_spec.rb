@@ -123,6 +123,81 @@ RSpec.describe "Api::V1::Transactions", type: :request do
         expect(json_response['transaction']['transaction_type']).to eq('expense')
         expect(json_response['transaction']['category_id']).to eq(category.id)
       end
+
+      context 'budget warnings' do
+        let(:budget_category) { Category.create!(name: 'Food', user: user) }
+        let(:budget) { Budget.create(category: budget_category, user: user, monthly_limit: 1000, month: Date.current.beginning_of_month) }
+
+        context 'when budget is exceeded' do
+          before do
+            Transaction.create!(
+              title: 'Existing expense 1',
+              user: user,
+              category: budget_category,
+              amount: 500,
+              date: Date.current,
+              transaction_type: 'expense'
+            )
+            Transaction.create!(
+              title: 'Existing expense 2',
+              user: user,
+              category: budget_category,
+              amount: 300,
+              date: Date.current,
+              transaction_type: 'expense'
+            )
+            budget
+          end
+
+          it 'warns when budget is exceeded' do
+            post '/api/v1/transactions', params: {
+              transaction: {
+                amount: 250.0,
+                category_id: budget_category.id,
+                title: "Budget exceeding expense",
+                transaction_type: "expense"
+              }
+            }
+
+            expect(response).to have_http_status(:created)
+            json_response = JSON.parse(response.body)
+
+            expect(json_response['warnings']).to include("You have exceeded the budget limit for category 'Food' by 50.0.")
+          end
+
+          it 'warns when budget limit is reached' do
+            post '/api/v1/transactions', params: {
+              transaction: {
+                amount: 200.0,
+                category_id: budget_category.id,
+                title: "Budget limit reached",
+                transaction_type: "expense"
+              }
+            }
+
+            expect(response).to have_http_status(:created)
+            json_response = JSON.parse(response.body)
+
+            expect(json_response['warnings']).to include("You've reached the budget limit for category 'Food'.")
+          end
+
+          it 'warns when approaching budget limit' do
+            post '/api/v1/transactions', params: {
+              transaction: {
+                amount: 150.0,
+                category_id: budget_category.id,
+                title: "Almost budget limit expense",
+                transaction_type: "expense"
+              }
+            }
+
+            expect(response).to have_http_status(:created)
+            json_response = JSON.parse(response.body)
+
+            expect(json_response['warnings']).to include("You're approaching your budget limit for category 'Food'.")
+          end
+        end
+      end
     end
   end
 end
