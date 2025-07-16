@@ -12,7 +12,11 @@ class Api::V1::TransactionsController < ApplicationController
 
   def create
     if @transaction.save
-      render json: @transaction, status: :created
+      warnings = @transaction.expense? ? @transaction.budget_warnings(@transaction) : []
+      render json: {
+        transaction: @transaction,
+        warning: warnings
+      }, status: :created
     else
       render json: { errors:@transaction.errors.full_messages }, status: :unprocessable_entity
     end
