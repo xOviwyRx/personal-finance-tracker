@@ -15,7 +15,7 @@ class Api::V1::TransactionsController < ApplicationController
       warnings = @transaction.expense? ? @transaction.budget_warnings(@transaction) : []
       render json: {
         transaction: @transaction,
-        warning: warnings
+        warnings: warnings
       }, status: :created
     else
       render json: { errors:@transaction.errors.full_messages }, status: :unprocessable_entity

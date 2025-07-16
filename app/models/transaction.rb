@@ -33,7 +33,7 @@ class Transaction < ApplicationRecord
     if total_category_expenses > budget.monthly_limit
       warnings << "You have exceeded the budget limit for category '#{transaction.category.name}' by #{total_category_expenses - budget.monthly_limit}."
     elsif total_category_expenses == budget.monthly_limit
-      warnings << "You've reached the budget limit for category #{transaction.category.name}"
+      warnings << "You've reached the budget limit for category '#{transaction.category.name}'."
     elsif total_category_expenses > budget.monthly_limit * 0.75
       warnings << "You're approaching your budget limit for category '#{transaction.category.name}'."
     end
