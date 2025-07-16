@@ -118,10 +118,10 @@ RSpec.describe "Api::V1::Transactions", type: :request do
           }
         }
         json_response = JSON.parse(response.body)
-        expect(json_response['title']).to eq('Keyboard')
-        expect(json_response['amount']).to eq('20.0')
-        expect(json_response['transaction_type']).to eq('expense')
-        expect(json_response['category_id']).to eq(category.id)
+        expect(json_response['transaction']['title']).to eq('Keyboard')
+        expect(json_response['transaction']['amount']).to eq('20.0')
+        expect(json_response['transaction']['transaction_type']).to eq('expense')
+        expect(json_response['transaction']['category_id']).to eq(category.id)
       end
     end
   end
