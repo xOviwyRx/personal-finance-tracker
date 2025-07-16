@@ -42,6 +42,27 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 - `GET /api/v1/transactions` - List all transactions
 - `POST /api/v1/transactions` - Create a new transaction
 
+## Features
+
+### Budget Monitoring
+The API includes real-time budget monitoring that provides warnings when creating expense transactions:
+
+- **Budget Exceeded**: Warns when the monthly budget limit is exceeded, showing the overage amount
+- **Budget Limit Reached**: Notifies when exactly at the budget limit
+- **Approaching Limit**: Alerts when expenses reach 75% of the monthly budget limit
+
+Budget warnings are returned in the transaction creation response:
+```json
+{
+  "transaction": { ... },
+  "warnings": [
+    "You have exceeded the budget limit for category 'Food' by 50.0."
+  ]
+}
+```
+
+*Note: The current budget monitoring implementation will be optimized for better performance in future iterations.*
+
 ## Status
 
 🚧 Work in Progress
@@ -54,4 +75,6 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 - ✅ Ransack search functionality (Categories)
 - ✅ RSpec tests (Ransack)
 - ✅ CanCanCan
-- ⏳ RSpec tests (CanCanCan)
+  ✅ Budget monitoring and warnings
+  ⏳ RSpec tests (CanCanCan)
+  🔄 Budget monitoring optimization
