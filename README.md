@@ -54,7 +54,7 @@ The API includes real-time budget monitoring that provides warnings when creatin
 Budget warnings are returned in the transaction creation response:
 ```json
 {
-  "transaction": { ... },
+  "transaction": { },
   "warnings": [
     "You have exceeded the budget limit for category 'Food' by 50.0."
   ]
@@ -75,6 +75,6 @@ Budget warnings are returned in the transaction creation response:
 - ✅ Ransack search functionality (Categories)
 - ✅ RSpec tests (Ransack)
 - ✅ CanCanCan
-  ✅ Budget monitoring and warnings
-  ⏳ RSpec tests (CanCanCan)
-  🔄 Budget monitoring optimization
+- ✅ Budget monitoring and warnings
+- ⏳ RSpec tests (CanCanCan)
+- 🔄 Budget monitoring optimization
