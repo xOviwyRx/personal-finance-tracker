@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class BudgetWarningService
+  APPROACHING_THRESHOLD = 0.75
   def initialize(transaction)
     @transaction = transaction
     @user = transaction.user
@@ -42,7 +43,7 @@ class BudgetWarningService
       warnings << "You have exceeded the budget limit for category '#{@category.name}' by #{excess}."
     elsif total_expenses == budget.monthly_limit
       warnings << "You've reached the budget limit for category '#{@category.name}'."
-    elsif total_expenses > budget.monthly_limit * 0.75
+    elsif total_expenses > budget.monthly_limit * APPROACHING_THRESHOLD
       warnings << "You're approaching your budget limit for category '#{@category.name}'."
     end
 
