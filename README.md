@@ -2,6 +2,23 @@
 
 A Ruby on Rails API for tracking personal finances with budgets, categories, and transactions.
 
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Testing the API](#testing-the-api)
+- [Development](#development)
+   - [Code Quality](#code-quality)
+   - [Testing](#testing)
+- [Tech Stack](#tech-stack)
+- [API Endpoints](#api-endpoints)
+   - [Authentication](#authentication)
+   - [Categories](#categories)
+   - [Budgets](#budgets)
+   - [Transactions](#transactions)
+- [Features](#features)
+   - [Budget Monitoring](#budget-monitoring)
+- [Status](#status)
+
 ## Getting Started
 
 1. **Clone the repository**
