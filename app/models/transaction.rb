@@ -20,6 +20,8 @@ class Transaction < ApplicationRecord
   end
 
   def budget_warnings
+    return [] unless expense?
+
     budget = user.budgets.find_by(category: category, month: Date.current.beginning_of_month)
     return [] unless budget
 
