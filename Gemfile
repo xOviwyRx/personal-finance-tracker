@@ -52,3 +52,9 @@ end
 gem 'devise'
 gem 'ransack'
 gem 'cancancan'
+group :development do
+  gem 'rubocop', require: false
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
+  gem 'rubocop-performance'
+end
