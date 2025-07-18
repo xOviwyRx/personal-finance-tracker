@@ -44,6 +44,41 @@ curl -X POST http://localhost:3000/api/v1/users/sign_in \
   -d '{"email": "test@example.com", "password": "password123"}'
 ```
 
+## Development
+
+### Code Quality
+
+This project uses **RuboCop** for Ruby code linting and style enforcement:
+
+```bash
+# Run RuboCop to check for style violations
+docker-compose exec web rubocop
+
+# Auto-fix violations where possible
+docker-compose exec web rubocop -a
+
+# Run RuboCop on specific files
+docker-compose exec web rubocop app/models/user.rb
+```
+
+### Testing
+
+Run the test suite with RSpec:
+
+```bash
+# Run all tests
+docker-compose exec web rspec
+
+# Run specific test files
+docker-compose exec web rspec spec/models/user_spec.rb
+
+# Run tests with coverage report
+docker-compose exec web rspec --format documentation
+
+# Run tests for a specific directory
+docker-compose exec web rspec spec/requests/
+```
+
 ## Tech Stack
 
 ### Backend
@@ -58,8 +93,9 @@ curl -X POST http://localhost:3000/api/v1/users/sign_in \
 ### Search & Utilities
 - Ransack
 
-### Testing
+### Testing & Code Quality
 - RSpec
+- RuboCop
 
 ### DevOps & Deployment
 - Docker & Docker Compose
@@ -122,5 +158,6 @@ Budget warnings are returned in the transaction creation response:
 - ✅ CanCanCan
 - ✅ Budget monitoring and warnings
 - ✅ Docker containerization
+- ✅ RuboCop code linting
 - ⏳ RSpec tests (CanCanCan)
 - 🔄 Budget monitoring optimization
