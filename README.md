@@ -46,13 +46,23 @@ curl -X POST http://localhost:3000/api/v1/users/sign_in \
 
 ## Tech Stack
 
-- Ruby on Rails (API-only)
+### Backend
+- Ruby 3.1.2+
+- Ruby on Rails 7.1.0+ (API-only)
 - PostgreSQL
-- Docker & Docker Compose
-- Devise Authentication
-- CanCanCan Authorization
+
+### Authentication & Authorization
+- Devise
+- CanCanCan
+
+### Search & Utilities
 - Ransack
-- RSpec for testing
+
+### Testing
+- RSpec
+
+### DevOps & Deployment
+- Docker & Docker Compose
 
 ## API Endpoints
 
