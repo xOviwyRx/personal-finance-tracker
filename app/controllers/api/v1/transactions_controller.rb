@@ -12,7 +12,7 @@ class Api::V1::TransactionsController < ApplicationController
 
   def create
     if @transaction.save
-      warnings = @transaction.expense? ? @transaction.budget_warnings(@transaction) : []
+      warnings = @transaction.expense? ? @transaction.budget_warnings : []
       render json: {
         transaction: @transaction,
         warnings: warnings
