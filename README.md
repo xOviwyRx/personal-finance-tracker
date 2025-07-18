@@ -2,18 +2,53 @@
 
 A Ruby on Rails API for tracking personal finances with budgets, categories, and transactions.
 
-## Setup
+## Getting Started
 
-1. Clone the repository
-2. Install dependencies: `bundle install`
-3. Setup database: `rails db:create db:migrate`
-4. Run tests: `rspec`
-5. Start server: `rails server`
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/xOviwyRx/personal-finance-tracker.git
+   cd personal-finance-tracker
+   ```
+
+2. **Build and run with Docker**
+   ```bash
+   docker-compose up --build
+   ```
+
+3. **Set up the database** (in another terminal)
+   ```bash
+   docker-compose exec web rails db:create db:migrate
+   ```
+
+## Testing the API
+
+Use **Postman** or **curl** to test the API endpoints. **Authentication is required** for all endpoints:
+
+```bash
+# 1. Sign up
+curl -X POST http://localhost:3000/api/v1/users \
+  -H "Content-Type: application/json" \
+  -d '{"email": "test@example.com", "password": "password123"}'
+
+# 2. Use the API
+curl -X GET http://localhost:3000/api/v1/categories
+
+# 3. Example: Create a new category
+curl -X POST http://localhost:3000/api/v1/categories \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Food", "description": "Food expenses"}'
+
+# Note: If you need to sign in later, use:
+curl -X POST http://localhost:3000/api/v1/users/sign_in \
+  -H "Content-Type: application/json" \
+  -d '{"email": "test@example.com", "password": "password123"}'
+```
 
 ## Tech Stack
 
 - Ruby on Rails (API-only)
 - PostgreSQL
+- Docker & Docker Compose
 - Devise Authentication
 - CanCanCan Authorization
 - Ransack
@@ -76,5 +111,6 @@ Budget warnings are returned in the transaction creation response:
 - ✅ RSpec tests (Ransack)
 - ✅ CanCanCan
 - ✅ Budget monitoring and warnings
+- ✅ Docker containerization
 - ⏳ RSpec tests (CanCanCan)
 - 🔄 Budget monitoring optimization
