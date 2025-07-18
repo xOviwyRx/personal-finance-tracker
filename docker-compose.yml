@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:password@db:5432/finance_tracker_development
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: finance_tracker_development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
