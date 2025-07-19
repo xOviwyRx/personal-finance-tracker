@@ -12,7 +12,7 @@ class Transaction < ApplicationRecord
 
   scope :expenses, -> { where(transaction_type: 'expense') }
   scope :current_month, -> {
-    where(date: Date.current.beginning_of_month..Date.current.end_of_month)
+    where(date: Date.current.all_month)
   }
 
   def expense?
