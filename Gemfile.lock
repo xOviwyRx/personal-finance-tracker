@@ -114,8 +114,6 @@ GEM
     factory_bot_rails (6.5.0)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    faker (3.5.2)
-      i18n (>= 1.8.11, < 2)
     ffi (1.17.2)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -336,7 +334,6 @@ DEPENDENCIES
   devise
   dotenv-rails
   factory_bot_rails
-  faker
   jbuilder (~> 2.7)
   listen (~> 3.3)
   pg (~> 1.1)
