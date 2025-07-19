@@ -93,6 +93,7 @@ RSpec.describe "Api::V1::Users", type: :request do
   # Sign in
   describe "POST /api/v1/users/sign_in" do
     let!(:temp_user) { create(:user) }
+
     context 'with valid credentials' do
       let(:valid_credentials) do
         {
@@ -118,6 +119,7 @@ RSpec.describe "Api::V1::Users", type: :request do
         expect(json_response['data']['user']['id']).to eq(temp_user.id)
       end
     end
+
     context 'with invalid credentials' do
       it 'returns unauthorized status for wrong password' do
         post '/api/v1/users/sign_in', params: {
@@ -140,6 +142,7 @@ RSpec.describe "Api::V1::Users", type: :request do
   # Sign out
   describe "DELETE /api/v1/users/sign_out" do
     let!(:user) { create(:user) }
+
     before do
       # Sign in first
       post '/api/v1/users/sign_in', params: {

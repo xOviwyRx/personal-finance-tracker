@@ -53,6 +53,7 @@ RSpec.describe "Api::V1::Categories", type: :request do
           user: { email: user.email, password: user.password }
         }, as: :json
       end
+
       it 'returns success status' do
         post '/api/v1/categories', params: { category: { name: 'Books' } }, as: :json
         expect(response).to have_http_status(:success)

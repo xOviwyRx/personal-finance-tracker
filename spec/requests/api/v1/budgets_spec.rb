@@ -25,7 +25,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
     context 'when authenticated' do
       before do
         post '/api/v1/users/sign_in', params: {
-          user: { email: user.email , password: user.password }
+          user: { email: user.email, password: user.password }
         }, as: :json
       end
 
