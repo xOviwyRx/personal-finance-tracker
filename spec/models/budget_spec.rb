@@ -7,8 +7,8 @@ RSpec.describe Budget, type: :model do
   end
 
   it 'is invalid without monthly_limit' do
-    user = User.create(email: 'test@example.com', password: 'password123')
-    category = Category.create(name: 'Food', user: user)
+    user = create(:user)
+    category = create(:category, user: user)
 
     budget = Budget.new(monthly_limit: nil, user: user, category: category)
     expect(budget).not_to be_valid
