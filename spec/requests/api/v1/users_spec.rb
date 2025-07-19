@@ -3,10 +3,11 @@ require 'rails_helper'
 RSpec.describe "Api::V1::Users", type: :request do
   # Registration new user
   describe "POST /api/v1/users" do
+    let(:temp_user) { build(:user) }
     let(:valid_attributes) do
       {
         user: {
-          email: 'test@example.com',
+          email: temp_user.email,
           password: 'password',
           password_confirmation: 'password',
         }
@@ -44,7 +45,7 @@ RSpec.describe "Api::V1::Users", type: :request do
       it 'does not create a new user with short password' do
         invalid_params = {
           user: {
-            email: 'test@example.com',
+            email: temp_user.email,
             password: '123',
             password_confirmation: '123'
           }
@@ -58,7 +59,7 @@ RSpec.describe "Api::V1::Users", type: :request do
       it 'does not create a user with mismatched password' do
         invalid_params = {
           user: {
-            email: 'test@example.com',
+            email: temp_user.email,
             password: 'password',
             password_confirmation: 'pass'
           }
@@ -75,7 +76,7 @@ RSpec.describe "Api::V1::Users", type: :request do
         post '/api/v1/users', params: valid_attributes, as: :json
 
         json_response = JSON.parse(response.body)
-        expect(json_response['data']['user']['email']).to eq('test@example.com')
+        expect(json_response['data']['user']['email']).to eq(temp_user.email)
         expect(json_response['status']['code']).to eq(201)
       end
 
@@ -91,13 +92,13 @@ RSpec.describe "Api::V1::Users", type: :request do
 
   # Sign in
   describe "POST /api/v1/users/sign_in" do
-    let!(:user) { User.create!(email: 'test@example.com', password: 'password') }
+    let!(:temp_user) { create(:user) }
     context 'with valid credentials' do
       let(:valid_credentials) do
         {
           user: {
-            email: 'test@example.com',
-            password: 'password'
+            email: temp_user.email,
+            password: temp_user.password,
           }
         }
       end
@@ -113,8 +114,8 @@ RSpec.describe "Api::V1::Users", type: :request do
         json_response = JSON.parse(response.body)
         expect(json_response['status']['code']).to eq(200)
         expect(json_response['status']['message']).to eq('Logged in successfully.')
-        expect(json_response['data']['user']['email']).to eq('test@example.com')
-        expect(json_response['data']['user']['id']).to eq(user.id)
+        expect(json_response['data']['user']['email']).to eq(temp_user.email)
+        expect(json_response['data']['user']['id']).to eq(temp_user.id)
       end
     end
     context 'with invalid credentials' do
@@ -138,10 +139,11 @@ RSpec.describe "Api::V1::Users", type: :request do
 
   # Sign out
   describe "DELETE /api/v1/users/sign_out" do
+    let!(:user) { create(:user) }
     before do
       # Sign in first
       post '/api/v1/users/sign_in', params: {
-        user: { email: 'test@example.com', password: 'password' }
+        user: { email: user.email, password: user.password }
       }, as: :json
     end
 
