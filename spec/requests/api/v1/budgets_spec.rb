@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Budgets", type: :request do
-  let!(:user) { User.create!(email: 'test@example.com', password: 'password') }
-  let!(:category) { Category.create!(name: 'Electronics', user: user) }
+  let!(:user) { create(:user) }
+  let!(:category) { create(:category, user: user) }
   let!(:budget1) { Budget.create!(
     user: user,
     monthly_limit: '1000',
@@ -25,7 +25,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
     context 'when authenticated' do
       before do
         post '/api/v1/users/sign_in', params: {
-          user: { email: 'test@example.com', password: 'password' }
+          user: { email: user.email , password: user.password }
         }, as: :json
       end
 
@@ -81,7 +81,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
     context 'when authenticated' do
       before do
         post '/api/v1/users/sign_in', params: {
-          user: { email: 'test@example.com', password: 'password' }
+          user: { email: user.email, password: user.password }
         }, as: :json
       end
 
@@ -132,7 +132,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
     context 'when authenticated' do
       before do
         post '/api/v1/users/sign_in', params: {
-          user: { email: 'test@example.com', password: 'password' }
+          user: { email: user.email, password: user.password }
         }, as: :json
       end
 
@@ -164,7 +164,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
     context 'when authenticated' do
       before do
         post '/api/v1/users/sign_in', params: {
-          user: { email: 'test@example.com', password: 'password' }
+          user: { email: user.email, password: user.password }
         }, as: :json
       end
 
