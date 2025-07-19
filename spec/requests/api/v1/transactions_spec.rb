@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Transactions", type: :request do
-  let!(:user) { User.create!(email: 'test@example.com', password: 'password') }
-  let!(:category) { Category.create!(name: 'Electronics', user: user) }
+  let!(:user) { create(:user) }
+  let!(:category) { create(:category, user: user, name: 'Electronics') }
   let!(:transaction1) { Transaction.create!(
     title: 'Laptop',
     user: user,
@@ -29,7 +29,7 @@ RSpec.describe "Api::V1::Transactions", type: :request do
     context 'when authenticated' do
       before do
         post '/api/v1/users/sign_in', params: {
-          user: { email: 'test@example.com', password: 'password' }
+          user: { email: user.email, password: user.password }
         }, as: :json
       end
 
@@ -92,7 +92,7 @@ RSpec.describe "Api::V1::Transactions", type: :request do
     context 'when authenticated' do
       before do
         post '/api/v1/users/sign_in', params: {
-          user: { email: 'test@example.com', password: 'password' }
+          user: { email: user.email, password: user.password }
         }, as: :json
       end
 
@@ -125,7 +125,7 @@ RSpec.describe "Api::V1::Transactions", type: :request do
       end
 
       context 'budget warnings' do
-        let(:budget_category) { Category.create!(name: 'Food', user: user) }
+        let(:budget_category) { create(:category, user: user) }
         let(:budget) { Budget.create(category: budget_category, user: user, monthly_limit: 1000, month: Date.current.beginning_of_month) }
 
         context 'when budget is exceeded' do
