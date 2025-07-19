@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Transaction, type: :model do
-  let(:user) { User.create(email: 'test@example.com', password: 'password') }
-  let(:category) { Category.create(name: 'Food', user: user) }
+  let(:user) { create(:user) }
+  let(:category) { create(:category, user: user) }
 
   it 'has amount' do
     transaction = Transaction.new(amount: 10)
@@ -55,8 +55,8 @@ RSpec.describe Transaction, type: :model do
     end
 
     context 'category validations' do
-      let(:user2) { User.create(email: 'test2@example.com', password: 'password') }
-      let(:category2) { Category.create(name: 'Food', user: user2) }
+      let(:user2) { create(:user) }
+      let(:category2) { create(:category, user: user2) }
 
       it 'does create transaction with category of current user' do
         transaction = Transaction.new(
