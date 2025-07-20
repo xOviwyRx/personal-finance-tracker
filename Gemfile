@@ -14,6 +14,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 
 # Authentication & Authorization
 gem 'devise'
+gem 'devise-jwt'
 gem 'cancancan'
 
 # Search functionality
