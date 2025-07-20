@@ -78,6 +78,8 @@ GEM
       mutex_m
       securerandom (>= 0.3)
       tzinfo (~> 2.0)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.3)
     base64 (0.3.0)
     bcrypt (3.1.20)
@@ -128,6 +130,9 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     json (2.13.0)
+    json-schema (5.2.1)
+      addressable (~> 2.8)
+      bigdecimal (~> 3.1)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     listen (3.9.0)
@@ -174,6 +179,7 @@ GEM
     psych (5.2.6)
       date
       stringio
+    public_suffix (6.0.2)
     puma (6.6.0)
       nio4r (~> 2.0)
     racc (1.8.1)
@@ -251,6 +257,21 @@ GEM
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.4)
+    rswag (2.16.0)
+      rswag-api (= 2.16.0)
+      rswag-specs (= 2.16.0)
+      rswag-ui (= 2.16.0)
+    rswag-api (2.16.0)
+      activesupport (>= 5.2, < 8.1)
+      railties (>= 5.2, < 8.1)
+    rswag-specs (2.16.0)
+      activesupport (>= 5.2, < 8.1)
+      json-schema (>= 2.2, < 6.0)
+      railties (>= 5.2, < 8.1)
+      rspec-core (>= 2.14)
+    rswag-ui (2.16.0)
+      actionpack (>= 5.2, < 8.1)
+      railties (>= 5.2, < 8.1)
     rubocop (1.78.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
@@ -342,6 +363,7 @@ DEPENDENCIES
   rails (~> 7.1.0)
   ransack
   rspec-rails
+  rswag
   rubocop
   rubocop-performance
   rubocop-rails
