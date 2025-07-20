@@ -12,7 +12,7 @@ RSpec.describe 'Transactions API', type: :request do
                  type: :object,
                  properties: {
                    id: { type: :integer },
-                   amount: { type: :decimal },
+                   amount: { type: :number },
                    title: { type: :string },
                    date: { type: :date },
                    transaction_type: { type: :string },
@@ -35,7 +35,7 @@ RSpec.describe 'Transactions API', type: :request do
       parameter name: :transaction, in: :body, schema: {
         type: :object,
         properties: {
-          amount: { type: :decimal },
+          amount: { type: :number },
           category_id: { type: :integer },
           transaction_type: { type: :string },
           title: { type: :string },
