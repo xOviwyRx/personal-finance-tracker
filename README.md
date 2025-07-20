@@ -173,8 +173,8 @@ Budget warnings are returned in the transaction creation response:
 - ✅ Ransack search functionality (Categories)
 - ✅ RSpec tests (Ransack)
 - ✅ CanCanCan
+- ✅ RSpec tests (CanCanCan)
 - ✅ Budget monitoring and warnings
 - ✅ Docker containerization
 - ✅ RuboCop code linting
-- ⏳ RSpec tests (CanCanCan)
 - 🔄 Budget monitoring optimization
