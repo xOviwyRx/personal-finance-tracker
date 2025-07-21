@@ -310,4 +310,15 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
   config.navigational_formats = []
   config.skip_session_storage = [:http_auth]
+
+  config.jwt do |jwt|
+    jwt.secret = Rails.application.credentials.devise_jwt_secret_key
+    jwt.dispatch_requests = [
+      ['POST', %r{^/api/v1/users/sign_in$}],
+    ]
+    jwt.revocation_requests = [
+      ['DELETE', %r{^/api/v1/users/sign_out$}]
+    ]
+    jwt.expiration_time = 1.day.to_i
+  end
 end
