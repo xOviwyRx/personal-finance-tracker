@@ -39,27 +39,44 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 
 ## Testing the API
 
-Use **Postman** or **curl** to test the API endpoints. **Authentication is required** for all endpoints:
+**JWT authentication is required** for all endpoints except authentication routes.
+
+### Using Postman
+Postman automatically handles JWT tokens when using Devise-JWT. Simply:
+1. Sign up or sign in through the authentication endpoints
+2. Postman will automatically include the JWT token in subsequent requests
+3. No manual token management needed!
+
+### Using curl
+For curl, you need to manually handle JWT tokens:
 
 ```bash
-# 1. Sign up
+# 1. Sign up (returns JWT token in Authorization header)
 curl -X POST http://localhost:3000/api/v1/users \
   -H "Content-Type: application/json" \
-  -d '{"email": "test@example.com", "password": "password123"}'
+  -d '{"user": {"email": "test@example.com", "password": "password123", "password_confirmation": "password123"}}'
 
-# 2. Use the API
-curl -X GET http://localhost:3000/api/v1/categories
-
-# 3. Example: Create a new category
-curl -X POST http://localhost:3000/api/v1/categories \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Food", "description": "Food expenses"}'
-
-# Note: If you need to sign in later, use:
+# 2. Sign in (returns JWT token in Authorization header)
 curl -X POST http://localhost:3000/api/v1/users/sign_in \
   -H "Content-Type: application/json" \
-  -d '{"email": "test@example.com", "password": "password123"}'
+  -d '{"user": {"email": "test@example.com", "password": "password123"}}'
+
+# 3. Copy the JWT token from the Authorization header and use it in subsequent requests
+curl -X GET http://localhost:3000/api/v1/categories \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE"
+
+# 4. Example: Create a new category
+curl -X POST http://localhost:3000/api/v1/categories \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE" \
+  -d '{"name": "Food", "description": "Food expenses"}'
+
+# 5. Sign out (revokes the JWT token)
+curl -X DELETE http://localhost:3000/api/v1/users/sign_out \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE"
 ```
+
+**Note**: With curl, you must manually copy the JWT token from the `Authorization` header of the sign up/sign in response and include it as a Bearer token in all subsequent API requests.
 
 ## Development
 
@@ -105,6 +122,7 @@ docker-compose exec web rspec spec/requests/
 
 ### Authentication & Authorization
 - Devise
+- Devise-JWT (JWT token authentication)
 - CanCanCan
 
 ### Search & Utilities
@@ -120,9 +138,9 @@ docker-compose exec web rspec spec/requests/
 ## API Endpoints
 
 ### Authentication
-- `POST /api/v1/users` - Sign up
-- `POST /api/v1/users/sign_in` - Sign in
-- `DELETE /api/v1/users/sign_out` - Sign out
+- `POST /api/v1/users` - Sign up (returns JWT token)
+- `POST /api/v1/users/sign_in` - Sign in (returns JWT token)
+- `DELETE /api/v1/users/sign_out` - Sign out (revokes JWT token)
 
 ### Categories
 - `GET /api/v1/categories` - List all categories
@@ -177,4 +195,6 @@ Budget warnings are returned in the transaction creation response:
 - ✅ Budget monitoring and warnings
 - ✅ Docker containerization
 - ✅ RuboCop code linting
+- ✅ JWT-Devise
+- 🔄 Swagger API documentation
 - 🔄 Budget monitoring optimization
