@@ -2,15 +2,12 @@ Rails.application.routes.draw do
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
 
-  scope '/api/v1' do
-    devise_for :users, controllers: {
-      sessions: 'users/sessions',
-      registrations: 'users/registrations'
-    }
-  end
-
   namespace :api do
     namespace :v1 do
+      devise_for :users, defaults: { format: :json }, controllers: {
+        sessions: 'users/sessions',
+        registrations: 'users/registrations'
+      }
       resources :transactions
       resources :budgets
       resources :categories
