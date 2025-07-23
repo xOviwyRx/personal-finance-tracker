@@ -14,11 +14,11 @@ RSpec.describe 'Transactions API', type: :request do
                    id: { type: :integer },
                    amount: { type: :number },
                    title: { type: :string },
-                   date: { type: :date },
+                   date: { type: :string, format: :date },
                    transaction_type: { type: :string },
                    category_id: { type: :integer },
-                   created_at: { type: :datetime, format: :iso8601 },
-                   updated_at: { type: :datetime, format: :iso8601 },
+                   created_at: { type: :string, format: :datetime },
+                   updated_at: { type: :string, format: :datetime },
                    user_id: { type: :integer },
                  }
                }

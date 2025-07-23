@@ -26,17 +26,18 @@ paths:
                     title:
                       type: string
                     date:
-                      type: date
+                      type: string
+                      format: date
                     transaction_type:
                       type: string
                     category_id:
                       type: integer
                     created_at:
-                      type: datetime
-                      format: iso8601
+                      type: string
+                      format: datetime
                     updated_at:
-                      type: datetime
-                      format: iso8601
+                      type: string
+                      format: datetime
                     user_id:
                       type: integer
     post:
