@@ -67,8 +67,148 @@ paths:
               - category_id
               - transaction_type
               - title
+  "/users/sign_in":
+    post:
+      summary: sign in
+      tags:
+      - Authentication
+      parameters: []
+      responses:
+        '200':
+          description: successful sign in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 200
+                      message:
+                        type: string
+                        example: Logged in successfully.
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          email:
+                            type: string
+                            example: user@example.com
+                          password:
+                            type: string
+                            example: password123
+        '401':
+          description: invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      example: user@example.com
+                    password:
+                      type: string
+                      example: password123
+              required:
+              - email
+              - password
+  "/users/":
+    post:
+      summary: sign up
+      tags:
+      - Authentication
+      parameters: []
+      responses:
+        '201':
+          description: successful sign up
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      code:
+                        type: integer
+                        example: 201
+                      message:
+                        type: string
+                        example: Signed up successfully.
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          email:
+                            type: string
+                            example: newuser@example.com
+                          password:
+                            type: string
+                            example: password123
+        '422':
+          description: validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Error message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      example: newuser@example.com
+                    password:
+                      type: string
+                      example: password123
+                    password_confirmation:
+                      type: string
+                      example: password123
+              required:
+              - email
+              - password
+              - password_confirmation
 servers:
 - url: http://{defaultHost}/api/v1
   variables:
     defaultHost:
       default: localhost:3000
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- Bearer: []
