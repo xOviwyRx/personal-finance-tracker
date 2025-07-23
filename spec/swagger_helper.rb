@@ -32,6 +32,16 @@ RSpec.configure do |config|
           }
         }
       ],
+      tags: [
+        {
+          name: 'Authentication',
+          description: 'User authentication endpoints'
+        },
+        {
+          name: 'Transactions',
+          description: 'Transaction management endpoints'
+        }
+      ],
       components: {
         securitySchemes: {
           Bearer: {
