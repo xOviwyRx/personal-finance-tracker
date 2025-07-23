@@ -28,3 +28,14 @@
 # For further information see the following documentation:
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy-Report-Only
 # Rails.application.config.content_security_policy_report_only = true
+Rails.application.config.content_security_policy do |policy|
+  policy.default_src :self
+  policy.script_src :self, :unsafe_inline, :unsafe_eval
+  policy.style_src :self, :unsafe_inline, 'https://fonts.googleapis.com'
+  policy.font_src :self, 'https://fonts.gstatic.com'
+  policy.img_src :self, :data, 'https://validator.swagger.io'
+  policy.connect_src :self, 'http://localhost:3000'
+  policy.object_src :none
+  policy.frame_ancestors :none
+  policy.form_action :self
+end
