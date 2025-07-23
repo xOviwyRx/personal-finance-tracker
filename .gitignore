@@ -33,3 +33,7 @@
 
 # IDE
 .idea/
+
+# Generated OpenAPI/Swagger files
+/gen/
+/swagger/
