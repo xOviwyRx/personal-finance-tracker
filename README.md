@@ -54,12 +54,14 @@ For curl, you need to manually handle JWT tokens:
 # 1. Sign up (returns JWT token in Authorization header)
 curl -X POST http://localhost:3000/api/v1/users \
   -H "Content-Type: application/json" \
-  -d '{"user": {"email": "test@example.com", "password": "password123", "password_confirmation": "password123"}}'
+  -d '{"user": {"email": "test@example.com", "password": "password123", "password_confirmation": "password123"}}' \
+  -i
 
 # 2. Sign in (returns JWT token in Authorization header)
 curl -X POST http://localhost:3000/api/v1/users/sign_in \
   -H "Content-Type: application/json" \
-  -d '{"user": {"email": "test@example.com", "password": "password123"}}'
+  -d '{"user": {"email": "test@example.com", "password": "password123"}}'\
+  -i
 
 # 3. Copy the JWT token from the Authorization header and use it in subsequent requests
 curl -X GET http://localhost:3000/api/v1/categories \
