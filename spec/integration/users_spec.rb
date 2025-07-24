@@ -50,7 +50,7 @@ RSpec.describe 'Authentication API', type: :request do
       response(401, 'invalid credentials') do
         schema type: :object,
                properties: {
-                 error: { type: :string }
+                 error: { type: :string, example: 'Error message' }
                }
 
         run_test!
