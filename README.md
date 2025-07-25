@@ -39,47 +39,78 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 
 ## Testing the API
 
-**JWT authentication is required** for all endpoints except authentication routes.
+**JWT authentication is required** for all endpoints except authentication routes. You must manually handle JWT tokens.
+
+### Authentication Flow
+
+1. **Sign up or sign in** to get a JWT token
+2. **Extract the token** from the response body
+3. **Include the token** as a Bearer token in the Authorization header for all subsequent requests
 
 ### Using Postman
-Postman automatically handles JWT tokens when using Devise-JWT. Simply:
-1. Sign up or sign in through the authentication endpoints
-2. Postman will automatically include the JWT token in subsequent requests
-3. No manual token management needed!
+
+```json
+POST http://localhost:3000/api/v1/users/sign_up
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "test@example.com",
+    "password": "password123",
+    "password_confirmation": "password123"
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9...",
+  "user": {
+    "id": 1,
+    "email": "test@example.com"
+  }
+}
+```
+
+**Then for all subsequent requests, add the Authorization header:**
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
+```
 
 ### Using curl
-For curl, you need to manually handle JWT tokens:
 
 ```bash
-# 1. Sign up (returns JWT token in Authorization header)
-curl -X POST http://localhost:3000/api/v1/users \
+# 1. Sign up (returns JWT token in response body)
+curl -X POST http://localhost:3000/api/v1/users/sign_up \
   -H "Content-Type: application/json" \
-  -d '{"user": {"email": "test@example.com", "password": "password123", "password_confirmation": "password123"}}' \
-  -i
+  -d '{"user": {"email": "test@example.com", "password": "password123", "password_confirmation": "password123"}}'
 
-# 2. Sign in (returns JWT token in Authorization header)
+# Response: {"token":"eyJhbGciOiJIUzI1NiJ9...","user":{"id":1,"email":"test@example.com"}}
+
+# 2. Sign in (returns JWT token in response body)
 curl -X POST http://localhost:3000/api/v1/users/sign_in \
   -H "Content-Type: application/json" \
-  -d '{"user": {"email": "test@example.com", "password": "password123"}}'\
-  -i
+  -d '{"user": {"email": "test@example.com", "password": "password123"}}'
 
-# 3. Copy the JWT token from the Authorization header and use it in subsequent requests
+# Response: {"token":"eyJhbGciOiJIUzI1NiJ9...","user":{"id":1,"email":"test@example.com"}}
+
+# 3. Use the JWT token from the response body in subsequent requests
 curl -X GET http://localhost:3000/api/v1/categories \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE"
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..."
 
 # 4. Example: Create a new category
 curl -X POST http://localhost:3000/api/v1/categories \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE" \
-  -d '{"name": "Food", "description": "Food expenses"}'
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..." \
+  -d '{"category": {"name": "Food"}}'
 
-# 5. Sign out (revokes the JWT token)
+# 5. Sign out
 curl -X DELETE http://localhost:3000/api/v1/users/sign_out \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE"
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..."
 ```
 
-**Note**: With curl, you must manually copy the JWT token from the `Authorization` header of the sign up/sign in response and include it as a Bearer token in all subsequent API requests.
-
+**Important**: Copy the `token` value from the JSON response body (not from headers) and use it as a Bearer token in the Authorization header for all protected endpoints.
 ## Development
 
 ### Code Quality
