@@ -152,6 +152,7 @@ docker-compose exec web rspec spec/requests/
 - Ruby 3.1.2+
 - Ruby on Rails 7.1.0+ (API-only)
 - PostgreSQL
+- REST API
 
 ### Authentication & Authorization
 - Devise
