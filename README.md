@@ -49,10 +49,9 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 
 ### Using Postman
 
-```json
-POST http://localhost:3000/api/v1/users/sign_up
-Content-Type: application/json
+```POST http://localhost:3000/api/v1/users/sign_up```
 
+```json
 {
   "user": {
     "email": "test@example.com",
