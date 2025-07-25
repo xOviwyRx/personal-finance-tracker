@@ -13,8 +13,8 @@ RSpec.describe 'Authentication API', type: :request do
           user: {
             type: :object,
             properties: {
-              email: { type: :string, example: 'user@example.com' },
-              password: { type: :string, example: 'password123' }
+              email: { type: :string, example: 'test@example.com' },
+              password: { type: :string, example: 'password' }
             }
           }
         },
@@ -24,23 +24,12 @@ RSpec.describe 'Authentication API', type: :request do
       response(200, 'successful sign in') do
         schema type: :object,
                properties: {
-                 status: {
+                 token: { type: :string, example: 'test_token' },
+                 user: {
                    type: :object,
                    properties: {
-                     code: { type: :integer, example: 200 },
-                     message: { type: :string, example: 'Logged in successfully.' },
-                   },
-                 },
-                 data: {
-                   type: :object,
-                   properties: {
-                     user: {
-                       type: :object,
-                       properties: {
-                         email: { type: :string, example: 'user@example.com' },
-                         password: { type: :string, example: 'password123' }
-                       }
-                     }
+                     email: { type: :string, example: 'test@example.com' },
+                     password: { type: :string, example: 'password' }
                    }
                  }
                }
@@ -50,7 +39,7 @@ RSpec.describe 'Authentication API', type: :request do
       response(401, 'invalid credentials') do
         schema type: :object,
                properties: {
-                 error: { type: :string, example: 'Error message' }
+                 error: { type: :string, example: 'Invalid credentials' }
                }
 
         run_test!
@@ -70,9 +59,9 @@ RSpec.describe 'Authentication API', type: :request do
           user: {
             type: :object,
             properties: {
-              email: { type: :string, example: 'newuser@example.com' },
-              password: { type: :string, example: 'password123' },
-              password_confirmation: { type: :string, example: 'password123' }
+              email: { type: :string, example: 'test@example.com' },
+              password: { type: :string, example: 'password' },
+              password_confirmation: { type: :string, example: 'password' }
             }
           }
         },
@@ -82,23 +71,12 @@ RSpec.describe 'Authentication API', type: :request do
       response(201, 'successful sign up') do
         schema type: :object,
                properties: {
-                 status: {
+                 token: { type: :string, example: 'test_token' },
+                 user: {
                    type: :object,
                    properties: {
-                     code: { type: :integer, example: 201 },
-                     message: { type: :string, example: 'Signed up successfully.' },
-                   },
-                 },
-                 data: {
-                   type: :object,
-                   properties: {
-                     user: {
-                       type: :object,
-                       properties: {
-                         email: { type: :string, example: 'newuser@example.com' },
-                         password: { type: :string, example: 'password123' }
-                       }
-                     }
+                     email: { type: :string, example: 'test@example.com' },
+                     password: { type: :string, example: 'password' }
                    }
                  }
                }
@@ -108,12 +86,28 @@ RSpec.describe 'Authentication API', type: :request do
       response(422, 'validation errors') do
         schema type: :object,
                properties: {
-                 status: {
-                   type: :object,
-                   properties: {
-                     message: { type: :string , example: 'Error message' },
+                 errors: {
+                   type: :array,
+                   items: {
+                     type: :string
                    }
                  }
+               }
+        run_test!
+      end
+    end
+  end
+
+  path '/users/sign_out' do
+    delete('sign out') do
+      tags 'Authentication'
+      consumes 'application/json'
+      produces 'application/json'
+
+      response(200, 'successful sign out') do
+        schema type: :object,
+               properties: {
+                 message: { type: :string, example: 'Logged out successfully.' },
                }
         run_test!
       end
