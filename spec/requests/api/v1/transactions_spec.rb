@@ -27,26 +27,22 @@ RSpec.describe "Api::V1::Transactions", type: :request do
     end
 
     context 'when authenticated' do
-      before do
-        post '/api/v1/users/sign_in', params: {
-          user: { email: user.email, password: user.password }
-        }, as: :json
-      end
+      let(:headers) { auth_headers_for(user) }
 
       it 'returns status code 200' do
-        get '/api/v1/transactions'
+        get '/api/v1/transactions', headers: headers
         expect(response).to have_http_status(:ok)
       end
 
       it 'returns all transactions without search' do
-        get '/api/v1/transactions'
+        get '/api/v1/transactions', headers: headers
 
         json_response = JSON.parse(response.body)
         expect(json_response.length).to eq(2)
       end
 
       it 'filters by title' do
-        get '/api/v1/transactions?q[title_eq]=Laptop'
+        get '/api/v1/transactions?q[title_eq]=Laptop', headers: headers
 
         json_response = JSON.parse(response.body)
         expect(json_response.length).to eq(1)
@@ -54,21 +50,21 @@ RSpec.describe "Api::V1::Transactions", type: :request do
       end
 
       it 'filters by amount' do
-        get '/api/v1/transactions?q[amount_gt]=1500'
+        get '/api/v1/transactions?q[amount_gt]=1500', headers: headers
         json_response = JSON.parse(response.body)
         amounts = json_response.map { |t| t['amount'].to_f }
         expect(amounts).to all(be > 1500)
       end
 
       it 'filters by date' do
-        get '/api/v1/transactions?q[date_gt]=2025-01-15'
+        get '/api/v1/transactions?q[date_gt]=2025-01-15', headers: headers
         json_response = JSON.parse(response.body)
         dates = json_response.map { |t| Date.parse(t['date']) }
         expect(dates).to all(be > Date.parse('2025-01-15'))
       end
 
       it 'filters by transaction_type' do
-        get '/api/v1/transactions?q[transaction_type_eq]=expense'
+        get '/api/v1/transactions?q[transaction_type_eq]=expense', headers: headers
         json_response = JSON.parse(response.body)
         transaction_types = json_response.map { |t| t['transaction_type'] }
         expect(transaction_types).to all(eq('expense'))
@@ -90,11 +86,7 @@ RSpec.describe "Api::V1::Transactions", type: :request do
     end
 
     context 'when authenticated' do
-      before do
-        post '/api/v1/users/sign_in', params: {
-          user: { email: user.email, password: user.password }
-        }, as: :json
-      end
+      let(:headers) { auth_headers_for(user) }
 
       it 'returns status code 201' do
         post '/api/v1/transactions', params: {
@@ -104,7 +96,7 @@ RSpec.describe "Api::V1::Transactions", type: :request do
             title: "Keyboard",
             transaction_type: "expense"
           }
-        }
+        }, headers: headers
         expect(response).to have_http_status(:created)
       end
 
@@ -116,7 +108,7 @@ RSpec.describe "Api::V1::Transactions", type: :request do
             title: "Keyboard",
             transaction_type: "expense"
           }
-        }
+        }, headers: headers
         json_response = JSON.parse(response.body)
         expect(json_response['transaction']['title']).to eq('Keyboard')
         expect(json_response['transaction']['amount']).to eq('20.0')
@@ -157,7 +149,7 @@ RSpec.describe "Api::V1::Transactions", type: :request do
                 title: "Budget exceeding expense",
                 transaction_type: "expense"
               }
-            }
+            }, headers: headers
 
             expect(response).to have_http_status(:created)
             json_response = JSON.parse(response.body)
@@ -173,7 +165,7 @@ RSpec.describe "Api::V1::Transactions", type: :request do
                 title: "Budget limit reached",
                 transaction_type: "expense"
               }
-            }
+            }, headers: headers
 
             expect(response).to have_http_status(:created)
             json_response = JSON.parse(response.body)
@@ -189,7 +181,7 @@ RSpec.describe "Api::V1::Transactions", type: :request do
                 title: "Almost budget limit expense",
                 transaction_type: "expense"
               }
-            }
+            }, headers: headers
 
             expect(response).to have_http_status(:created)
             json_response = JSON.parse(response.body)

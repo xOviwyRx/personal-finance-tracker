@@ -12,19 +12,15 @@ RSpec.describe "Api::V1::Categories", type: :request do
     end
 
     context 'when authenticated' do
-      before do
-        post '/api/v1/users/sign_in', params: {
-          user: { email: user.email, password: user.password }
-        }, as: :json
-      end
+      let(:headers) { auth_headers_for(user) }
 
       it 'returns status code 200' do
-        get '/api/v1/categories'
+        get '/api/v1/categories', headers: headers
         expect(response).to have_http_status(:ok)
       end
 
       it 'returns all categories without filters' do
-        get '/api/v1/categories'
+        get '/api/v1/categories', headers: headers
 
         json_response = JSON.parse(response.body)
         expect(json_response.length).to eq(2)
@@ -32,7 +28,7 @@ RSpec.describe "Api::V1::Categories", type: :request do
       end
 
       it 'filters by name' do
-        get '/api/v1/categories?q[name_eq]=Food'
+        get '/api/v1/categories?q[name_eq]=Food', headers: headers
 
         json_response = JSON.parse(response.body)
         expect(json_response.length).to eq(1)
@@ -48,25 +44,21 @@ RSpec.describe "Api::V1::Categories", type: :request do
     end
 
     context 'when authenticated' do
-      before do
-        post '/api/v1/users/sign_in', params: {
-          user: { email: user.email, password: user.password }
-        }, as: :json
-      end
+      let(:headers) { auth_headers_for(user) }
 
       it 'returns success status' do
-        post '/api/v1/categories', params: { category: { name: 'Books' } }, as: :json
+        post '/api/v1/categories', params: { category: { name: 'Books' } }, as: :json, headers: headers
         expect(response).to have_http_status(:success)
       end
 
       it 'returns created category' do
-        post '/api/v1/categories', params: { category: { name: 'Books' } }, as: :json
+        post '/api/v1/categories', params: { category: { name: 'Books' } }, as: :json, headers: headers
         json_response = JSON.parse(response.body)
         expect(json_response['name']).to eq('Books')
       end
 
       it 'does not allow creating duplicate category with same user' do
-        post '/api/v1/categories', params: { category: { name: 'Electronics' } }, as: :json
+        post '/api/v1/categories', params: { category: { name: 'Electronics' } }, as: :json, headers: headers
         expect(response).to have_http_status(:unprocessable_content)
         json_response = JSON.parse(response.body)
         Rails.logger.debug(json_response['errors'])
@@ -82,14 +74,10 @@ RSpec.describe "Api::V1::Categories", type: :request do
     end
 
     context 'when authenticated' do
-      before do
-        post '/api/v1/users/sign_in', params: {
-          user: { email: user.email, password: user.password }
-        }, as: :json
-      end
+      let(:headers) { auth_headers_for(user) }
 
       it 'updates the category successfully' do
-        put "/api/v1/categories/#{category1.id}", params: { category: { name: 'Updated Electronics' } }, as: :json
+        put "/api/v1/categories/#{category1.id}", params: { category: { name: 'Updated Electronics' } }, as: :json, headers: headers
         expect(response).to have_http_status(:ok)
         expect(response.parsed_body["name"]).to eq("Updated Electronics")
         expect(category1.reload.name).to eq("Updated Electronics")
@@ -105,14 +93,10 @@ RSpec.describe "Api::V1::Categories", type: :request do
     end
 
     context 'when authenticated' do
-      before do
-        post '/api/v1/users/sign_in', params: {
-          user: { email: user.email, password: user.password }
-        }, as: :json
-      end
+      let(:headers) { auth_headers_for(user) }
 
       it 'deletes the category successfully' do
-        delete "/api/v1/categories/#{category1.id}"
+        delete "/api/v1/categories/#{category1.id}", headers: headers
         expect(response).to have_http_status(:no_content)
         expect(Category.find_by(id: category1.id)).to be_nil
       end

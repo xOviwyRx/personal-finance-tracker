@@ -23,26 +23,22 @@ RSpec.describe "Api::V1::Budgets", type: :request do
     end
 
     context 'when authenticated' do
-      before do
-        post '/api/v1/users/sign_in', params: {
-          user: { email: user.email, password: user.password }
-        }, as: :json
-      end
+      let(:headers) { auth_headers_for(user) }
 
       it 'returns status code 200 and budgets' do
-        get '/api/v1/budgets'
+        get '/api/v1/budgets', headers: headers
         expect(response).to have_http_status(:ok)
       end
 
       it 'returns all budgets without filter' do
-        get '/api/v1/budgets'
+        get '/api/v1/budgets', headers: headers
 
         json_response = JSON.parse(response.body)
         expect(json_response.length).to eq(2)
       end
 
       it 'filters budgets by month' do
-        get '/api/v1/budgets?q[month_eq]=2023-01-01'
+        get '/api/v1/budgets?q[month_eq]=2023-01-01', headers: headers
 
         json_response = JSON.parse(response.body)
         expect(json_response.length).to eq(1)
@@ -57,7 +53,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
           category: other_category,
           month: '2023-02-01'
         )
-        get "/api/v1/budgets?q[category_id_eq]=#{category.id}"
+        get "/api/v1/budgets?q[category_id_eq]=#{category.id}", headers: headers
         json_response = JSON.parse(response.body)
         expect(json_response.length).to eq(2)
         expect(json_response.first['category_id']).to eq(category.id)
@@ -79,11 +75,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
     end
 
     context 'when authenticated' do
-      before do
-        post '/api/v1/users/sign_in', params: {
-          user: { email: user.email, password: user.password }
-        }, as: :json
-      end
+      let(:headers) { auth_headers_for(user) }
 
       it 'returns status code 201 and created budget' do
         post '/api/v1/budgets', params: {
@@ -92,7 +84,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
             monthly_limit: '3000.0',
             month: '2023-01-01'
           }
-        }
+        }, headers: headers
         expect(response).to  have_http_status(:created)
         json_response = JSON.parse(response.body)
         expect(json_response['monthly_limit']).to eq('3000.0')
@@ -108,7 +100,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
             monthly_limit: '3000.0',
             month: '2023-01-01'
           }
-        }
+        }, headers: headers
 
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse(response.body)
@@ -130,11 +122,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
     end
 
     context 'when authenticated' do
-      before do
-        post '/api/v1/users/sign_in', params: {
-          user: { email: user.email, password: user.password }
-        }, as: :json
-      end
+      let(:headers) { auth_headers_for(user) }
 
       it 'returns status code 200 and updated budget' do
         put "/api/v1/budgets/#{budget1.id}", params: {
@@ -143,7 +131,7 @@ RSpec.describe "Api::V1::Budgets", type: :request do
             monthly_limit: '4000.0',
             month: '2023-01-01'
           }
-        }
+        }, headers: headers
         expect(response).to  have_http_status(:ok)
         json_response = JSON.parse(response.body)
         expect(json_response['monthly_limit']).to eq('4000.0')
@@ -162,14 +150,10 @@ RSpec.describe "Api::V1::Budgets", type: :request do
     end
 
     context 'when authenticated' do
-      before do
-        post '/api/v1/users/sign_in', params: {
-          user: { email: user.email, password: user.password }
-        }, as: :json
-      end
+      let(:headers) { auth_headers_for(user) }
 
       it 'returns status code 204' do
-        delete "/api/v1/budgets/#{budget1.id}"
+        delete "/api/v1/budgets/#{budget1.id}", headers: headers
         expect(response).to  have_http_status(:no_content)
         expect(Budget.find_by(id: budget1.id)).to be_nil
       end

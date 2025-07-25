@@ -76,8 +76,9 @@ RSpec.describe "Api::V1::Users", type: :request do
         post '/api/v1/users', params: valid_attributes, as: :json
 
         json_response = JSON.parse(response.body)
-        expect(json_response['data']['user']['email']).to eq(temp_user.email)
-        expect(json_response['status']['code']).to eq(201)
+        expect(json_response['token']).to be_present
+        expect(json_response['user']['id']).to be_present
+        expect(json_response['user']['email']).to eq(temp_user.email)
       end
 
       it 'returns error message for invalid data' do
@@ -85,7 +86,7 @@ RSpec.describe "Api::V1::Users", type: :request do
         post '/api/v1/users', params: invalid_params, as: :json
 
         json_response = JSON.parse(response.body)
-        expect(json_response['status']['message']).to include("couldn't be created")
+        expect(json_response['errors']).to be_present
       end
     end
   end
@@ -113,10 +114,9 @@ RSpec.describe "Api::V1::Users", type: :request do
         post '/api/v1/users/sign_in', params: valid_credentials, as: :json
 
         json_response = JSON.parse(response.body)
-        expect(json_response['status']['code']).to eq(200)
-        expect(json_response['status']['message']).to eq('Logged in successfully.')
-        expect(json_response['data']['user']['email']).to eq(temp_user.email)
-        expect(json_response['data']['user']['id']).to eq(temp_user.id)
+        expect(json_response['token']).to be_present
+        expect(json_response['user']['id']).to be_present
+        expect(json_response['user']['email']).to eq(temp_user.email)
       end
     end
 
@@ -141,26 +141,39 @@ RSpec.describe "Api::V1::Users", type: :request do
 
   # Sign out
   describe "DELETE /api/v1/users/sign_out" do
-    let!(:user) { create(:user) }
-
-    before do
-      # Sign in first
-      post '/api/v1/users/sign_in', params: {
-        user: { email: user.email, password: user.password }
-      }, as: :json
-    end
+    let!(:user) { create(:user, password: 'password') }
 
     it 'returns success status' do
-      delete '/api/v1/users/sign_out', as: :json
+      # Sign in first
+      post '/api/v1/users/sign_in', params: {
+        user: { email: user.email, password: 'password' }
+      }, as: :json
+
+      token = JSON.parse(response.body)['token']
+
+      # Now test sign out
+      delete '/api/v1/users/sign_out',
+             headers: { 'Authorization' => "Bearer #{token}" },
+             as: :json
+
       expect(response).to have_http_status(:ok)
     end
 
     it 'returns correct JSON structure' do
-      delete '/api/v1/users/sign_out', as: :json
+      # Sign in first
+      post '/api/v1/users/sign_in', params: {
+        user: { email: user.email, password: 'password' }
+      }, as: :json
+
+      token = JSON.parse(response.body)['token']
+
+      # Test sign out response
+      delete '/api/v1/users/sign_out',
+             headers: { 'Authorization' => "Bearer #{token}" },
+             as: :json
 
       json_response = JSON.parse(response.body)
-      expect(json_response['status']['code']).to eq(200)
-      expect(json_response['status']['message']).to eq('Logged out successfully.')
+      expect(json_response['message']).to eq('Logged out successfully')
     end
   end
 end
