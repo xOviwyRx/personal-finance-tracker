@@ -13,7 +13,11 @@ class ApplicationController < ActionController::API
 
         begin
             decoded_token = Warden::JWTAuth::TokenDecoder.new.call(token)
+            jti = decoded_token['jti']
             user_id = decoded_token['sub']
+            if JwtDenylist.exists?(jti: jti)
+                return render json: { error: 'Token has been revoked' }, status: :unauthorized
+            end
             @current_user = User.find(user_id)
         rescue JWT::DecodeError, ActiveRecord::RecordNotFound
             render json: { error: 'Invalid token' }, status: :unauthorized

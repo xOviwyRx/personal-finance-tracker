@@ -1,8 +1,7 @@
 class Api::V1::AuthController < ApplicationController
-  skip_before_action :authenticate_user!
+  skip_before_action :authenticate_user!, only: [:login, :signup]
   def login
     user = User.find_by(email: params[:user][:email])
-
 
     if user&.valid_password?(params[:user][:password])
       token, _payload = Warden::JWTAuth::UserEncoder.new.call(user, :user, nil)
