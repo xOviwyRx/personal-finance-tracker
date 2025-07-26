@@ -4,6 +4,7 @@ RSpec.describe 'Authentication API', type: :request do
   path '/users/sign_in' do
     post('sign in') do
       tags 'Authentication'
+      security []
       consumes 'application/json'
       produces 'application/json'
 
@@ -50,6 +51,7 @@ RSpec.describe 'Authentication API', type: :request do
   path '/users/' do
     post('sign up') do
       tags 'Authentication'
+      security []
       consumes 'application/json'
       produces 'application/json'
 
@@ -101,6 +103,7 @@ RSpec.describe 'Authentication API', type: :request do
   path '/users/sign_out' do
     delete('sign out') do
       tags 'Authentication'
+      description 'Logs out user by revoking their authentication token.'
       consumes 'application/json'
       produces 'application/json'
 
@@ -109,6 +112,15 @@ RSpec.describe 'Authentication API', type: :request do
                properties: {
                  message: { type: :string, example: 'Logged out successfully.' },
                }
+        run_test!
+      end
+
+      response(401, 'unauthorized') do
+        schema type: :object,
+               properties: {
+                 error: { type: :string }
+               }
+
         run_test!
       end
     end
