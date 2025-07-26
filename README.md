@@ -6,9 +6,12 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 
 - [Getting Started](#getting-started)
 - [Testing the API](#testing-the-api)
+   -[Swagger UI Documentation](#swagger-ui-documentation)
+   -[Authentication Flow](#authentication-flow)
 - [Development](#development)
    - [Code Quality](#code-quality)
    - [Testing](#testing)
+   - [Continuous Integration](#continuous-integration)
 - [Tech Stack](#tech-stack)
 - [API Endpoints](#api-endpoints)
    - [Authentication](#authentication)
@@ -98,6 +101,19 @@ docker-compose exec web rspec --format documentation
 docker-compose exec web rspec spec/requests/
 ```
 
+### Continuous Integration
+
+This project uses **GitHub Actions** for automated testing and code quality assurance.
+
+**Pipeline Features:**
+- **PostgreSQL 15** database service for realistic testing
+- **Ruby 3.1.2** environment setup
+- **RuboCop** code style and quality checks
+- **RSpec** comprehensive test suite
+- **Automated** on every push and pull request to `main`
+
+All code changes must pass CI checks before merging to maintain code quality and reliability.
+
 ## Tech Stack
 
 ### Backend
@@ -124,6 +140,7 @@ docker-compose exec web rspec spec/requests/
 
 ### DevOps & Deployment
 - Docker & Docker Compose
+- GitHub Actions CI/CD
 
 ## API Endpoints
 
@@ -187,4 +204,5 @@ Budget warnings are returned in the transaction creation response:
 - ✅ RuboCop code linting
 - ✅ JWT-Devise
 - ✅ Swagger API documentation
+  ✅ GitHub Actions CI/CD pipeline
 - 🔄 Budget monitoring optimization
