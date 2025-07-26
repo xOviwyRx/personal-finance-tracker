@@ -39,77 +39,28 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 
 ## Testing the API
 
-**JWT authentication is required** for all endpoints except authentication routes. You must manually handle JWT tokens.
+### Swagger UI Documentation
+
+**Interactive API documentation is available at:** `http://localhost:3000/api-docs`
+
+The Swagger UI provides:
+- Complete API endpoint documentation
+- Interactive testing interface
+- Request/response examples
+- Authentication handling
+- Parameter validation
 
 ### Authentication Flow
 
-1. **Sign up or sign in** to get a JWT token
-2. **Extract the token** from the response body
-3. **Include the token** as a Bearer token in the Authorization header for all subsequent requests
+1. **Visit** `http://localhost:3000/api-docs`
+2. **Sign up or sign in** using the authentication endpoints
+3. **Copy the JWT token** from the response body
+4. **Click "Authorize"** button in Swagger UI
+5. **Enter:** `Bearer YOUR_JWT_TOKEN`
+6. **Test any endpoint** directly in the browser
 
-### Using Postman
+**Important**: Copy the `token` value from the JSON response body and use it as a Bearer token in the Authorization header for all protected endpoints.
 
-```POST http://localhost:3000/api/v1/users/sign_up```
-
-```json
-{
-  "user": {
-    "email": "test@example.com",
-    "password": "password123",
-    "password_confirmation": "password123"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiJ9...",
-  "user": {
-    "id": 1,
-    "email": "test@example.com"
-  }
-}
-```
-
-**Then for all subsequent requests, add the Authorization header:**
-```
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
-```
-
-### Using curl
-
-```bash
-# 1. Sign up (returns JWT token in response body)
-curl -X POST http://localhost:3000/api/v1/users/sign_up \
-  -H "Content-Type: application/json" \
-  -d '{"user": {"email": "test@example.com", "password": "password123", "password_confirmation": "password123"}}'
-
-# Response: {"token":"eyJhbGciOiJIUzI1NiJ9...","user":{"id":1,"email":"test@example.com"}}
-
-# 2. Sign in (returns JWT token in response body)
-curl -X POST http://localhost:3000/api/v1/users/sign_in \
-  -H "Content-Type: application/json" \
-  -d '{"user": {"email": "test@example.com", "password": "password123"}}'
-
-# Response: {"token":"eyJhbGciOiJIUzI1NiJ9...","user":{"id":1,"email":"test@example.com"}}
-
-# 3. Use the JWT token from the response body in subsequent requests
-curl -X GET http://localhost:3000/api/v1/categories \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..."
-
-# 4. Example: Create a new category
-curl -X POST http://localhost:3000/api/v1/categories \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..." \
-  -d '{"category": {"name": "Food"}}'
-
-# 5. Sign out
-curl -X DELETE http://localhost:3000/api/v1/users/sign_out \
-  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..."
-```
-
-**Important**: Copy the `token` value from the JSON response body (not from headers) and use it as a Bearer token in the Authorization header for all protected endpoints.
 ## Development
 
 ### Code Quality
@@ -157,6 +108,10 @@ docker-compose exec web rspec spec/requests/
 - Devise
 - Devise-JWT (JWT token authentication)
 - CanCanCan
+
+### API Documentation
+- Swagger UI
+- RSwag
 
 ### Search & Utilities
 - Ransack
@@ -229,5 +184,5 @@ Budget warnings are returned in the transaction creation response:
 - ✅ Docker containerization
 - ✅ RuboCop code linting
 - ✅ JWT-Devise
-- 🔄 Swagger API documentation
+- ✅ Swagger API documentation
 - 🔄 Budget monitoring optimization
