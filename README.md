@@ -41,7 +41,7 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 
 ### Swagger UI Documentation
 
-**Interactive API documentation is available at:** `http://localhost:3000/api-docs`
+**Interactive API documentation is available at:** http://localhost:3000/api-docs
 
 Below is a preview of the Swagger UI interface:
 
@@ -56,7 +56,7 @@ The Swagger UI provides:
 
 ### Authentication Flow
 
-1. **Visit** `http://localhost:3000/api-docs`
+1. **Visit** http://localhost:3000/api-docs
 2. **Sign up or sign in** using the authentication endpoints
 3. **Copy the JWT token** from the response body
 4. **Click "Authorize"** button in Swagger UI
