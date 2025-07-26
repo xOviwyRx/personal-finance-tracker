@@ -63,8 +63,6 @@ The Swagger UI provides:
 5. **Enter:** `Bearer YOUR_JWT_TOKEN`
 6. **Test any endpoint** directly in the browser
 
-**Important**: Copy the `token` value from the JSON response body and use it as a Bearer token in the Authorization header for all protected endpoints.
-
 ## Development
 
 ### Code Quality
