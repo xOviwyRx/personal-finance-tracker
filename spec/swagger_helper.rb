@@ -38,9 +38,17 @@ RSpec.configure do |config|
           description: 'User authentication endpoints'
         },
         {
+          name: 'Categories',
+          description: 'Categories management endpoints'
+        },
+        {
+          name: 'Budgets',
+          description: 'Budgets management endpoints'
+        },
+        {
           name: 'Transactions',
           description: 'Transaction management endpoints'
-        }
+        },
       ],
       components: {
         securitySchemes: {
