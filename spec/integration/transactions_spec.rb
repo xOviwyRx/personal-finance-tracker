@@ -12,7 +12,7 @@ RSpec.describe 'Transactions API', type: :request do
                  type: :object,
                  properties: {
                    id: { type: :integer },
-                   amount: { type: :number },
+                   amount: { type: :string },
                    title: { type: :string },
                    date: { type: :string, format: :date },
                    transaction_type: { type: :string },
@@ -21,6 +21,15 @@ RSpec.describe 'Transactions API', type: :request do
                    updated_at: { type: :string, format: :datetime },
                    user_id: { type: :integer },
                  }
+               }
+
+        run_test!
+      end
+
+      response(401, 'unauthorized') do
+        schema type: :object,
+               properties: {
+                 error: { type: :string }
                }
 
         run_test!
@@ -35,7 +44,7 @@ RSpec.describe 'Transactions API', type: :request do
       parameter name: :transaction, in: :body, schema: {
         type: :object,
         properties: {
-          amount: { type: :number },
+          amount: { type: :string },
           category_id: { type: :integer },
           transaction_type: { type: :string },
           title: { type: :string },
@@ -44,6 +53,46 @@ RSpec.describe 'Transactions API', type: :request do
       }
 
       response(201, 'transaction created') do
+        schema type: :object,
+          properties: {
+            transaction: {
+              type: :object,
+                properties: {
+                  id: {type: :integer},
+                  title: { type: :string },
+                  amount: { type: :string },
+                  transaction_type: { type: :string },
+                  category_id: { type: :integer },
+                  created_at: { type: :string, format: :datetime },
+                  updated_at: { type: :string, format: :datetime },
+                  user_id: { type: :integer },
+                }
+              },
+            warnings: {
+              type: :array,
+              items: { type: :string }
+            }
+          }
+        run_test!
+      end
+
+      response(401, 'unauthorized') do
+        schema type: :object,
+               properties: {
+                 error: { type: :string }
+               }
+
+        run_test!
+      end
+
+      response(422, 'unprocessable entity') do
+        schema type: :object,
+               properties: {
+                 errors: {
+                   type: :array,
+                   items: { type: :string }
+                 }
+               }
         run_test!
       end
     end
