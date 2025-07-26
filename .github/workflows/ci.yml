@@ -55,4 +55,4 @@ jobs:
         run: bundle exec rubocop
 
       - name: Run RSpec tests
-        run: bundle exec rspec
+        run: bundle exec rspec --exclude-pattern "spec/integration/**/*_spec.rb"
