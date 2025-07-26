@@ -82,13 +82,13 @@ RSpec.describe "Api::V1::Budgets", type: :request do
           budget: {
             category_id: category.id,
             monthly_limit: '3000.0',
-            month: '2023-01-01'
+            month: '2023-03-01'
           }
         }, headers: headers
         expect(response).to  have_http_status(:created)
         json_response = JSON.parse(response.body)
         expect(json_response['monthly_limit']).to eq('3000.0')
-        expect(json_response['month']).to eq('2023-01-01')
+        expect(json_response['month']).to eq('2023-03-01')
         expect(json_response).to have_key('id')
         expect(json_response).to have_key('created_at')
         expect(json_response['category_id']).to eq(category.id)
