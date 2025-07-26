@@ -4,6 +4,7 @@ class ApplicationController < ActionController::API
     rescue_from CanCan::AccessDenied do |exception|
         render json: { error: 'Access denied' }, status: :forbidden
     end
+    rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
     private
 
@@ -36,5 +37,9 @@ class ApplicationController < ActionController::API
         pattern = /^Bearer /
         header = request.headers['Authorization']
         header.gsub(pattern, '') if header&.match(pattern)
+    end
+
+    def record_not_found(exception)
+        render json: { error: 'Record not found' }, status: :not_found
     end
 end
