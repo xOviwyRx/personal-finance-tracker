@@ -103,7 +103,8 @@ docker-compose exec web rspec spec/requests/
 
 ### Continuous Integration
 
-This project uses **GitHub Actions** for automated testing and code quality assurance.
+This project uses **GitHub Actions** for automated testing and code quality assurance:
+![CI](https://github.com/xOviwyRx/personal-finance-tracker/workflows/Ruby%20on%20Rails%20CI/badge.svg)
 
 **Pipeline Features:**
 - **PostgreSQL 15** database service for realistic testing
