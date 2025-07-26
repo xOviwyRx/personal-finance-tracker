@@ -21,7 +21,7 @@ class Api::V1::AuthController < ApplicationController
     user = User.new(user_params)
 
     if user.save
-      token, *payload = Warden::JWTAuth::UserEncoder.new.call(user, :user, nil)
+      token, = Warden::JWTAuth::UserEncoder.new.call(user, :user, nil)
       render json: {
         token: token,
         user: {

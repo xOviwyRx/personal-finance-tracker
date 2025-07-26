@@ -2,12 +2,10 @@ require 'rails_helper'
 require 'cancan/matchers'
 
 RSpec.describe Ability, type: :model do
-
   let(:user) { create(:user) }
   let(:ability) { Ability.new(user) }
 
   context 'user can manage own resources' do
-
     it 'user can manage own budget' do
       budget = create(:budget, user: user)
       expect(ability).to be_able_to(:manage, budget)

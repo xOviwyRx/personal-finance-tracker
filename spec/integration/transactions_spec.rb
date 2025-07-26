@@ -19,7 +19,7 @@ RSpec.describe 'Transactions API', type: :request do
                    category_id: { type: :integer },
                    created_at: { type: :string, format: :datetime },
                    updated_at: { type: :string, format: :datetime },
-                   user_id: { type: :integer },
+                   user_id: { type: :integer }
                  }
                }
 
@@ -47,32 +47,32 @@ RSpec.describe 'Transactions API', type: :request do
           amount: { type: :string },
           category_id: { type: :integer },
           transaction_type: { type: :string },
-          title: { type: :string },
+          title: { type: :string }
         },
         required: %w[amount category_id transaction_type title]
       }
 
       response(201, 'transaction created') do
         schema type: :object,
-          properties: {
-            transaction: {
-              type: :object,
-                properties: {
-                  id: {type: :integer},
-                  title: { type: :string },
-                  amount: { type: :string },
-                  transaction_type: { type: :string },
-                  category_id: { type: :integer },
-                  created_at: { type: :string, format: :datetime },
-                  updated_at: { type: :string, format: :datetime },
-                  user_id: { type: :integer },
-                }
-              },
-            warnings: {
-              type: :array,
-              items: { type: :string }
-            }
-          }
+               properties: {
+                 transaction: {
+                   type: :object,
+                   properties: {
+                     id: { type: :integer },
+                     title: { type: :string },
+                     amount: { type: :string },
+                     transaction_type: { type: :string },
+                     category_id: { type: :integer },
+                     created_at: { type: :string, format: :datetime },
+                     updated_at: { type: :string, format: :datetime },
+                     user_id: { type: :integer }
+                   }
+                 },
+                 warnings: {
+                   type: :array,
+                   items: { type: :string }
+                 }
+               }
         run_test!
       end
 

@@ -13,7 +13,7 @@ gem 'jbuilder', '~> 2.7' # JSON API
 gem 'bootsnap', '>= 1.4.4', require: false
 
 # Cross-Origin Resource Sharing (CORS)
-gem 'rack-cors' #
+gem 'rack-cors'
 
 # Authentication & Authorization
 gem 'devise'

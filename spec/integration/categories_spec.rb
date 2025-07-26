@@ -15,7 +15,7 @@ RSpec.describe 'Categories API', type: :request do
                    name: { type: :string },
                    created_at: { type: :string, format: :datetime },
                    updated_at: { type: :string, format: :datetime },
-                   user_id: { type: :integer },
+                   user_id: { type: :integer }
                  }
                }
         run_test!
@@ -51,7 +51,7 @@ RSpec.describe 'Categories API', type: :request do
                  name: { type: :string },
                  created_at: { type: :string, format: :datetime },
                  updated_at: { type: :string, format: :datetime },
-                 user_id: { type: :integer },
+                 user_id: { type: :integer }
                }
         run_test!
       end
@@ -75,9 +75,7 @@ RSpec.describe 'Categories API', type: :request do
                }
         run_test!
       end
-
     end
-
 
     path '/categories/{id}' do
       parameter name: :id, in: :path, type: :integer, description: 'Category ID'
@@ -102,7 +100,7 @@ RSpec.describe 'Categories API', type: :request do
                    name: { type: :string },
                    user_id: { type: :integer },
                    created_at: { type: :string, format: :datetime },
-                   updated_at: { type: :string, format: :datetime },
+                   updated_at: { type: :string, format: :datetime }
                  }
           run_test!
         end

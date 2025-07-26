@@ -48,7 +48,7 @@ RSpec.configure do |config|
         {
           name: 'Transactions',
           description: 'Transaction management endpoints'
-        },
+        }
       ],
       components: {
         securitySchemes: {

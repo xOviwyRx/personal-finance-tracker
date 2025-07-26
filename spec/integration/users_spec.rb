@@ -110,7 +110,7 @@ RSpec.describe 'Authentication API', type: :request do
       response(200, 'successful sign out') do
         schema type: :object,
                properties: {
-                 message: { type: :string, example: 'Logged out successfully.' },
+                 message: { type: :string, example: 'Logged out successfully.' }
                }
         run_test!
       end

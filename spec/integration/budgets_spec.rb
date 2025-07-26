@@ -22,9 +22,9 @@ RSpec.describe 'Budgets API', type: :request do
                      type: :object,
                      properties: {
                        id: { type: :integer },
-                       name: { type: :string },
-                     },
-                  }
+                       name: { type: :string }
+                     }
+                   }
                  }
                }
         run_test!
@@ -50,7 +50,7 @@ RSpec.describe 'Budgets API', type: :request do
         properties: {
           monthly_limit: { type: :string },
           month: { type: :string, format: :date },
-          category_id: { type: :integer },
+          category_id: { type: :integer }
         },
         required: ['monthly_limit']
       }
@@ -64,7 +64,7 @@ RSpec.describe 'Budgets API', type: :request do
                  category_id: { type: :integer },
                  created_at: { type: :string, format: :datetime },
                  updated_at: { type: :string, format: :datetime },
-                 user_id: { type: :integer },
+                 user_id: { type: :integer }
                }
         run_test!
       end
@@ -88,9 +88,7 @@ RSpec.describe 'Budgets API', type: :request do
                }
         run_test!
       end
-
     end
-
 
     path '/budgets/{id}' do
       parameter name: :id, in: :path, type: :integer, description: 'Budget ID'
@@ -105,7 +103,7 @@ RSpec.describe 'Budgets API', type: :request do
           properties: {
             monthly_limit: { type: :string },
             month: { type: :string, format: :date },
-            category_id: { type: :integer },
+            category_id: { type: :integer }
           },
           required: ['monthly_limit']
         }
@@ -119,7 +117,7 @@ RSpec.describe 'Budgets API', type: :request do
                    category_id: { type: :integer },
                    user_id: { type: :integer },
                    created_at: { type: :string, format: :datetime },
-                   updated_at: { type: :string, format: :datetime },
+                   updated_at: { type: :string, format: :datetime }
                  }
           run_test!
         end

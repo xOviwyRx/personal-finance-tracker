@@ -26,14 +26,12 @@ class Api::V1::CategoriesController < ApplicationController
   end
 
   def destroy
-    begin
-      @category.destroy!
-      head :no_content
-    rescue ActiveRecord::InvalidForeignKey
-      render json: {
-        error: "Category cannot be deleted because it has associated transactions"
-      }, status: :unprocessable_entity
-    end
+    @category.destroy!
+    head :no_content
+  rescue ActiveRecord::InvalidForeignKey
+    render json: {
+      error: "Category cannot be deleted because it has associated transactions"
+    }, status: :unprocessable_entity
   end
 
   private
