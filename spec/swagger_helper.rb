@@ -39,11 +39,11 @@ RSpec.configure do |config|
         },
         {
           name: 'Categories',
-          description: 'Categories management endpoints'
+          description: 'Category management endpoints'
         },
         {
           name: 'Budgets',
-          description: 'Budgets management endpoints'
+          description: 'Budget management endpoints'
         },
         {
           name: 'Transactions',
