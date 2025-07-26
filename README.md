@@ -43,6 +43,10 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 
 **Interactive API documentation is available at:** `http://localhost:3000/api-docs`
 
+Below is a preview of the Swagger UI interface:
+
+![Swagger UI Screenshot](docs/swagger-ui.png)
+
 The Swagger UI provides:
 - Complete API endpoint documentation
 - Interactive testing interface
