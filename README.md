@@ -6,8 +6,8 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 
 - [Getting Started](#getting-started)
 - [Testing the API](#testing-the-api)
-   -[Swagger UI Documentation](#swagger-ui-documentation)
-   -[Authentication Flow](#authentication-flow)
+   - [Swagger UI Documentation](#swagger-ui-documentation)
+   - [Authentication Flow](#authentication-flow)
 - [Development](#development)
    - [Code Quality](#code-quality)
    - [Testing](#testing)
@@ -204,5 +204,5 @@ Budget warnings are returned in the transaction creation response:
 - ✅ RuboCop code linting
 - ✅ JWT-Devise
 - ✅ Swagger API documentation
-  ✅ GitHub Actions CI/CD pipeline
+- ✅ GitHub Actions CI/CD pipeline
 - 🔄 Budget monitoring optimization
