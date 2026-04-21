@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_04_21_223500) do
+ActiveRecord::Schema[7.1].define(version: 2026_04_21_230000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "budgets", force: :cascade do |t|
-    t.decimal "monthly_limit", precision: 12, scale: 2
+    t.decimal "monthly_limit", precision: 12, scale: 2, null: false
     t.date "month"
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
