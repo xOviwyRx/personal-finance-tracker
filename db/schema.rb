@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_26_013519) do
+ActiveRecord::Schema[7.1].define(version: 2026_04_21_223500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "budgets", force: :cascade do |t|
-    t.decimal "monthly_limit"
+    t.decimal "monthly_limit", precision: 12, scale: 2
     t.date "month"
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
@@ -44,7 +44,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_26_013519) do
 
   create_table "transactions", force: :cascade do |t|
     t.string "title", null: false
-    t.decimal "amount", null: false
+    t.decimal "amount", precision: 12, scale: 2, null: false
     t.date "date", null: false
     t.string "transaction_type", null: false
     t.bigint "category_id", null: false
