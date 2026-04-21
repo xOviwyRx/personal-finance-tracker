@@ -1,4 +1,4 @@
-FROM ruby:3.1.2
+FROM ruby:3.3.4
 WORKDIR /app
 COPY Gemfile* ./
 RUN gem install bundler -v 2.3.14

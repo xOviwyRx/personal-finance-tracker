@@ -129,7 +129,8 @@ GEM
     factory_bot_rails (6.5.0)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    ffi (1.17.2)
+    ffi (1.17.2-arm64-darwin)
+    ffi (1.17.2-x86_64-linux-gnu)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.7)
@@ -164,7 +165,6 @@ GEM
       net-smtp
     marcel (1.0.4)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.9)
     minitest (5.25.5)
     msgpack (1.8.0)
     mutex_m (0.3.0)
@@ -178,8 +178,9 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.18.8)
-      mini_portile2 (~> 2.8.2)
+    nokogiri (1.18.8-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.18.8-x86_64-linux-gnu)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.27.0)
@@ -369,6 +370,7 @@ GEM
     zeitwerk (2.6.18)
 
 PLATFORMS
+  arm64-darwin-24
   x86_64-linux
 
 DEPENDENCIES
@@ -400,7 +402,7 @@ DEPENDENCIES
   web-console (>= 4.1.0)
 
 RUBY VERSION
-   ruby 3.1.2p20
+   ruby 3.3.4p94
 
 BUNDLED WITH
    2.3.14
