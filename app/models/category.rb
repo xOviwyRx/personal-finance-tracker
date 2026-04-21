@@ -1,6 +1,7 @@
 class Category < ApplicationRecord
     belongs_to :user
-    has_many :transactions
+    has_many :transactions, dependent: :destroy
+    has_many :budgets, dependent: :destroy
 
     validates :name, presence: true
     validates :name, uniqueness: { scope: :user_id }
