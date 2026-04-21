@@ -15,9 +15,6 @@ Metrics/MethodLength:
 Rails/I18nLocaleTexts:
   Enabled: false
 
-Rails/HasManyOrHasOneDependent:
-  Enabled: false
-
 Rails/UniqueValidationWithoutIndex:
   Enabled: false
 
