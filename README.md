@@ -1,6 +1,6 @@
 # Personal Finance Tracker API
 
-A Ruby on Rails API for tracking personal finances with budgets, categories, and transactions.
+A REST API for tracking personal finances with category-based monthly budgets and real-time warnings when transactions approach or exceed their limits.
 
 ## Table of Contents
 
@@ -9,8 +9,7 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
    - [Swagger UI Documentation](#swagger-ui-documentation)
    - [Authentication Flow](#authentication-flow)
 - [Development](#development)
-   - [Code Quality](#code-quality)
-   - [Testing](#testing)
+   - [Code Quality & Testing](#code-quality--testing)
    - [Continuous Integration](#continuous-integration)
 - [Tech Stack](#tech-stack)
 - [API Endpoints](#api-endpoints)
@@ -20,7 +19,7 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
    - [Transactions](#transactions)
 - [Features](#features)
    - [Budget Monitoring](#budget-monitoring)
-- [Status](#status)
+- [Roadmap](#roadmap)
 
 ## Getting Started
 
@@ -44,18 +43,9 @@ A Ruby on Rails API for tracking personal finances with budgets, categories, and
 
 ### Swagger UI Documentation
 
-**Interactive API documentation is available at:** http://localhost:3000/api-docs
-
-Below is a preview of the Swagger UI interface:
+Interactive API documentation at http://localhost:3000/api-docs
 
 ![Swagger UI Screenshot](docs/swagger-ui.png)
-
-The Swagger UI provides:
-- Complete API endpoint documentation
-- Interactive testing interface
-- Request/response examples
-- Authentication handling
-- Parameter validation
 
 ### Authentication Flow
 
@@ -68,53 +58,18 @@ The Swagger UI provides:
 
 ## Development
 
-### Code Quality
-
-This project uses **RuboCop** for Ruby code linting and style enforcement:
+### Code Quality & Testing
 
 ```bash
-# Run RuboCop to check for style violations
 docker-compose exec web rubocop
-
-# Auto-fix violations where possible
-docker-compose exec web rubocop -a
-
-# Run RuboCop on specific files
-docker-compose exec web rubocop app/models/user.rb
-```
-
-### Testing
-
-Run the test suite with RSpec:
-
-```bash
-# Run all tests
 docker-compose exec web rspec
-
-# Run specific test files
-docker-compose exec web rspec spec/models/user_spec.rb
-
-# Run tests with coverage report
-docker-compose exec web rspec --format documentation
-
-# Run tests for a specific directory
-docker-compose exec web rspec spec/requests/
 ```
 
 ### Continuous Integration
 
-This project uses **GitHub Actions** for automated testing and code quality assurance:
-
 ![CI](https://github.com/xOviwyRx/personal-finance-tracker/workflows/Ruby%20on%20Rails%20CI/badge.svg)
 
-**Pipeline Features:**
-- **PostgreSQL 15** database service for realistic testing
-- **Ruby 3.3.4** environment setup
-- **RuboCop** code style and quality checks
-- **RSpec** comprehensive test suite
-- **Automated** on every push and pull request to `main`
-
-All code changes must pass CI checks before merging to maintain code quality and reliability.
+GitHub Actions runs RuboCop and RSpec against PostgreSQL 15 on every push and pull request to `main`.
 
 ## Tech Stack
 
@@ -188,22 +143,10 @@ Budget warnings are returned in the transaction creation response:
 
 *Note: The current budget monitoring implementation will be optimized for better performance in future iterations.*
 
-## Status
+## Roadmap
 
-🚧 Work in Progress
-- ✅ User authentication (has_secure_password + JWT)
-- ✅ Categories CRUD
-- ✅ Budgets CRUD
-- ✅ Transactions Create & Read
-- ✅ User associations and data scoping
-- ✅ RSpec tests (Models, Requests)
-- ✅ Ransack search functionality (Categories)
-- ✅ RSpec tests (Ransack)
-- ✅ CanCanCan
-- ✅ RSpec tests (CanCanCan)
-- ✅ Budget monitoring and warnings
-- ✅ Docker containerization
-- ✅ RuboCop code linting
-- ✅ Swagger API documentation
-- ✅ GitHub Actions CI/CD pipeline
-- 🔄 Budget monitoring optimization
+Potential improvements for future iterations:
+- Monthly spending reports with category breakdown
+- Recurring transactions (rent, subscriptions)
+- Multi-currency support
+- Background processing for budget warnings to reduce request-time cost
