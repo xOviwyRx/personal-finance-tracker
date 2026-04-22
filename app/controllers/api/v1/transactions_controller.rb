@@ -10,6 +10,10 @@ class Api::V1::TransactionsController < ApplicationController
     render json: @transactions
   end
 
+  def show
+    render json: @transaction
+  end
+
   def create
     if @transaction.save
       warnings = BudgetWarningService.new(@transaction).generate_warnings
@@ -18,8 +22,25 @@ class Api::V1::TransactionsController < ApplicationController
         warnings: warnings
       }, status: :created
     else
-      render json: { errors:@transaction.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @transaction.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def update
+    if @transaction.update(transaction_params)
+      warnings = BudgetWarningService.new(@transaction).generate_warnings
+      render json: {
+        transaction: @transaction,
+        warnings: warnings
+      }
+    else
+      render json: { errors: @transaction.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @transaction.destroy
+    head :no_content
   end
 
   private

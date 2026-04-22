@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       post   'users',          to: 'auth#signup'
       delete 'users/sign_out', to: 'auth#logout'
 
-      resources :transactions, only: [:index, :create]
+      resources :transactions
       resources :budgets
       resources :categories
     end
