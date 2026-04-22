@@ -100,4 +100,63 @@ RSpec.describe "Api::V1::Transactions", type: :request do
       end
     end
   end
+
+  describe 'GET /api/v1/transactions/:id' do
+    let!(:transaction) { create(:transaction, user: user, category: category) }
+
+    it 'returns 401 without auth' do
+      get "/api/v1/transactions/#{transaction.id}"
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'returns the transaction' do
+      get "/api/v1/transactions/#{transaction.id}", headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "denies access to another user's transaction" do
+      other_transaction = create(:transaction)
+
+      get "/api/v1/transactions/#{other_transaction.id}", headers: headers
+      expect(response).to have_http_status(:forbidden)
+    end
+  end
+
+  describe 'PUT /api/v1/transactions/:id' do
+    let!(:transaction) { create(:transaction, user: user, category: category, amount: 100) }
+
+    it 'returns 401 without auth' do
+      put "/api/v1/transactions/#{transaction.id}", params: { transaction: { amount: 200 } }
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'updates the transaction' do
+      put "/api/v1/transactions/#{transaction.id}", params: { transaction: { amount: 200 } }, headers: headers
+
+      expect(response).to have_http_status(:ok)
+      expect(transaction.reload.amount).to eq(200)
+    end
+
+    it 'returns 422 for invalid transaction_type' do
+      put "/api/v1/transactions/#{transaction.id}", params: { transaction: { transaction_type: 'invalid' } }, headers: headers
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+  end
+
+  describe 'DELETE /api/v1/transactions/:id' do
+    let!(:transaction) { create(:transaction, user: user, category: category) }
+
+    it 'returns 401 without auth' do
+      delete "/api/v1/transactions/#{transaction.id}"
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'deletes the transaction' do
+      expect do
+        delete "/api/v1/transactions/#{transaction.id}", headers: headers
+      end.to change(Transaction, :count).by(-1)
+
+      expect(response).to have_http_status(:no_content)
+    end
+  end
 end
