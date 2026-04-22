@@ -4,7 +4,15 @@ FactoryBot.define do
     date { Date.current }
     amount { 10.0 }
     transaction_type { 'expense' }
-    association :user
-    association :category
+    user
+    category { association :category, user: user }
+
+    trait :income do
+      transaction_type { 'income' }
+    end
+
+    trait :expense do
+      transaction_type { 'expense' }
+    end
   end
 end
