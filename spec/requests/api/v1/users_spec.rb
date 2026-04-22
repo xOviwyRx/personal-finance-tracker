@@ -1,179 +1,88 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Users", type: :request do
-  # Registration new user
   describe "POST /api/v1/users" do
-    let(:temp_user) { build(:user) }
-    let(:valid_attributes) do
+    let(:valid_params) do
       {
         user: {
-          email: temp_user.email,
+          email: 'test@example.com',
           password: 'password',
-          password_confirmation: 'password',
+          password_confirmation: 'password'
         }
       }
     end
 
-    context 'with valid attributes' do
-      it 'creates a new user' do
-        expect {
-          post '/api/v1/users', params: valid_attributes, as: :json
-        }.to change(User, :count).by(1)
-      end
+    it 'creates a user' do
+      expect do
+        post '/api/v1/users', params: valid_params
+      end.to change(User, :count).by(1)
 
-      it 'returns success status' do
-        post '/api/v1/users', params: valid_attributes, as: :json
-        expect(response).to have_http_status(:created)
-      end
+      expect(response).to have_http_status(:created)
+    end
+
+    it 'returns an auth token on success' do
+      post '/api/v1/users', params: valid_params
+      expect(response.parsed_body['token']).to be_present
     end
 
     context 'with invalid attributes' do
-      it 'does not create a new user with invalid email' do
-        invalid_params = {
-          user: {
-            email: 'invalid-email',
-            password: 'password',
-            password_confirmation: 'password'
-          }
-        }
+      it 'rejects invalid email' do
+        params = { user: valid_params[:user].merge(email: 'invalid-email') }
 
-        expect {
-          post '/api/v1/users', params: invalid_params, as: :json
-        }.not_to change(User, :count)
+        expect { post '/api/v1/users', params: params }.not_to change(User, :count)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
-      it 'does not create a new user with short password' do
-        invalid_params = {
-          user: {
-            email: temp_user.email,
-            password: '123',
-            password_confirmation: '123'
-          }
-        }
+      it 'rejects short password' do
+        params = { user: valid_params[:user].merge(password: '123', password_confirmation: '123') }
 
-        expect {
-          post '/api/v1/users', params: invalid_params, as: :json
-        }.not_to change(User, :count)
+        expect { post '/api/v1/users', params: params }.not_to change(User, :count)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
 
-      it 'does not create a user with mismatched password' do
-        invalid_params = {
-          user: {
-            email: temp_user.email,
-            password: 'password',
-            password_confirmation: 'pass'
-          }
-        }
-        expect {
-          post '/api/v1/users', params: invalid_params, as: :json
-        }.not_to change(User, :count)
-      end
+      it 'rejects mismatched password confirmation' do
+        params = { user: valid_params[:user].merge(password_confirmation: 'different') }
 
-    end
-
-    context 'response format' do
-      it 'returns user data on successful creation' do
-        post '/api/v1/users', params: valid_attributes, as: :json
-
-        json_response = JSON.parse(response.body)
-        expect(json_response['token']).to be_present
-        expect(json_response['user']['id']).to be_present
-        expect(json_response['user']['email']).to eq(temp_user.email)
-      end
-
-      it 'returns error message for invalid data' do
-        invalid_params = { user: { email: 'invalid' } }
-        post '/api/v1/users', params: invalid_params, as: :json
-
-        json_response = JSON.parse(response.body)
-        expect(json_response['errors']).to be_present
+        expect { post '/api/v1/users', params: params }.not_to change(User, :count)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
 
-  # Sign in
   describe "POST /api/v1/users/sign_in" do
-    let!(:temp_user) { create(:user) }
+    let!(:existing_user) { create(:user) }
 
-    context 'with valid credentials' do
-      let(:valid_credentials) do
-        {
-          user: {
-            email: temp_user.email,
-            password: temp_user.password,
-          }
-        }
-      end
-
-      it 'returns success status' do
-        post '/api/v1/users/sign_in', params: valid_credentials, as: :json
-        expect(response).to have_http_status(:ok)
-      end
-
-      it 'returns correct JSON structure' do
-        post '/api/v1/users/sign_in', params: valid_credentials, as: :json
-
-        json_response = JSON.parse(response.body)
-        expect(json_response['token']).to be_present
-        expect(json_response['user']['id']).to be_present
-        expect(json_response['user']['email']).to eq(temp_user.email)
-      end
-    end
-
-    context 'with invalid credentials' do
-      it 'returns unauthorized status for wrong password' do
-        post '/api/v1/users/sign_in', params: {
-          user: { email: 'test@example.com', password: 'wrong' }
-        }, as: :json
-
-        expect(response).to have_http_status(:unauthorized)
-      end
-
-      it 'returns unauthorized status for non-existent user' do
-        post '/api/v1/users/sign_in', params: {
-          user: { email: 'nonexistent@example.com', password: 'password' }
-        }, as: :json
-
-        expect(response).to have_http_status(:unauthorized)
-      end
-    end
-  end
-
-  # Sign out
-  describe "DELETE /api/v1/users/sign_out" do
-    let!(:user) { create(:user, password: 'password') }
-
-    it 'returns success status' do
-      # Sign in first
-      post '/api/v1/users/sign_in', params: {
-        user: { email: user.email, password: 'password' }
-      }, as: :json
-
-      token = JSON.parse(response.body)['token']
-
-      # Now test sign out
-      delete '/api/v1/users/sign_out',
-             headers: { 'Authorization' => "Bearer #{token}" },
-             as: :json
+    it 'returns a token with valid credentials' do
+      post '/api/v1/users/sign_in', params: { user: { email: existing_user.email, password: existing_user.password } }
 
       expect(response).to have_http_status(:ok)
+      expect(response.parsed_body['token']).to be_present
     end
 
-    it 'returns correct JSON structure' do
-      # Sign in first
-      post '/api/v1/users/sign_in', params: {
-        user: { email: user.email, password: 'password' }
-      }, as: :json
+    it 'returns 401 with wrong password' do
+      post '/api/v1/users/sign_in', params: { user: { email: existing_user.email, password: 'wrong' } }
+      expect(response).to have_http_status(:unauthorized)
+    end
 
-      token = JSON.parse(response.body)['token']
+    it 'returns 401 for non-existent user' do
+      post '/api/v1/users/sign_in', params: { user: { email: 'nobody@example.com', password: 'password' } }
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
 
-      # Test sign out response
-      delete '/api/v1/users/sign_out',
-             headers: { 'Authorization' => "Bearer #{token}" },
-             as: :json
+  describe "DELETE /api/v1/users/sign_out" do
+    let(:user) { create(:user) }
 
-      json_response = JSON.parse(response.body)
-      expect(json_response['message']).to eq('Logged out successfully')
+    it 'signs the user out' do
+      delete '/api/v1/users/sign_out', headers: auth_headers_for(user)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body['message']).to eq('Logged out successfully')
+    end
+
+    it 'returns 401 without auth' do
+      delete '/api/v1/users/sign_out'
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 end

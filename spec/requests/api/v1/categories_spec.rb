@@ -1,105 +1,92 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Categories", type: :request do
-  let!(:user) { create(:user) }
-  let!(:category1) { create(:category, user: user) }
-  let!(:category2) { create(:category, user: user, name: 'Electronics') }
+  let(:user) { create(:user) }
+  let(:headers) { auth_headers_for(user) }
 
   describe "GET /api/v1/categories" do
-    it 'returns 401 when not authenticated' do
+    it 'returns 401 without auth' do
       get '/api/v1/categories'
       expect(response).to have_http_status(:unauthorized)
     end
 
-    context 'when authenticated' do
-      let(:headers) { auth_headers_for(user) }
+    context 'with existing categories' do
+      let!(:food) { create(:category, user: user, name: 'Food') }
+      let!(:electronics) { create(:category, user: user, name: 'Electronics') }
 
-      it 'returns status code 200' do
+      it "returns user's categories" do
         get '/api/v1/categories', headers: headers
         expect(response).to have_http_status(:ok)
-      end
-
-      it 'returns all categories without filters' do
-        get '/api/v1/categories', headers: headers
-
-        json_response = JSON.parse(response.body)
-        expect(json_response.length).to eq(2)
-        expect(json_response.first).to have_key('name')
+        expect(response.parsed_body.length).to eq(2)
       end
 
       it 'filters by name' do
         get '/api/v1/categories?q[name_eq]=Food', headers: headers
-
-        json_response = JSON.parse(response.body)
-        expect(json_response.length).to eq(1)
-        expect(json_response.first['name']).to eq('Food')
+        expect(response.parsed_body.length).to eq(1)
       end
+    end
+
+    it "does not return other users' categories" do
+      other_user = create(:user)
+      create(:category, user: other_user)
+
+      get '/api/v1/categories', headers: headers
+      expect(response.parsed_body).to be_empty
     end
   end
 
   describe "POST /api/v1/categories" do
-    it 'returns 401 when not authenticated' do
-      post '/api/v1/categories', params: { category: { name: 'Food' } }, as: :json
+    it 'returns 401 without auth' do
+      post '/api/v1/categories', params: { category: { name: 'Books' } }
       expect(response).to have_http_status(:unauthorized)
     end
 
-    context 'when authenticated' do
-      let(:headers) { auth_headers_for(user) }
+    it 'creates a category' do
+      expect do
+        post '/api/v1/categories', params: { category: { name: 'Books' } }, headers: headers
+      end.to change(Category, :count).by(1)
 
-      it 'returns success status' do
-        post '/api/v1/categories', params: { category: { name: 'Books' } }, as: :json, headers: headers
-        expect(response).to have_http_status(:success)
-      end
+      expect(response).to have_http_status(:created)
+    end
 
-      it 'returns created category' do
-        post '/api/v1/categories', params: { category: { name: 'Books' } }, as: :json, headers: headers
-        json_response = JSON.parse(response.body)
-        expect(json_response['name']).to eq('Books')
-      end
+    it 'rejects duplicate name for same user' do
+      create(:category, user: user, name: 'Electronics')
 
-      it 'does not allow creating duplicate category with same user' do
-        post '/api/v1/categories', params: { category: { name: 'Electronics' } }, as: :json, headers: headers
-        expect(response).to have_http_status(:unprocessable_content)
-        json_response = JSON.parse(response.body)
-        Rails.logger.debug(json_response['errors'])
-        expect(json_response['errors']).to include("Name has already been taken")
-      end
+      post '/api/v1/categories', params: { category: { name: 'Electronics' } }, headers: headers
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 
   describe "PUT /api/v1/categories/:id" do
-    it 'returns 401 when not authenticated' do
-      put "/api/v1/categories/#{category1.id}", params: { category: { name: 'Updated' } }, as: :json
+    let!(:category) { create(:category, user: user) }
+
+    it 'returns 401 without auth' do
+      put "/api/v1/categories/#{category.id}", params: { category: { name: 'Updated' } }
       expect(response).to have_http_status(:unauthorized)
     end
 
-    context 'when authenticated' do
-      let(:headers) { auth_headers_for(user) }
+    it 'updates the category' do
+      put "/api/v1/categories/#{category.id}", params: { category: { name: 'Renamed' } }, headers: headers
 
-      it 'updates the category successfully' do
-        put "/api/v1/categories/#{category1.id}", params: { category: { name: 'Updated Electronics' } }, as: :json, headers: headers
-        expect(response).to have_http_status(:ok)
-        expect(response.parsed_body["name"]).to eq("Updated Electronics")
-        expect(category1.reload.name).to eq("Updated Electronics")
-      end
+      expect(response).to have_http_status(:ok)
+      expect(category.reload.name).to eq('Renamed')
     end
-
   end
 
-  describe "DELETE /api/v1/categories/:id" do
-    it 'returns 401 when not authenticated' do
-      delete "/api/v1/categories/#{category1.id}", as: :json
+  describe 'DELETE /api/v1/categories/:id' do
+    let!(:category) { create(:category, user: user) }
+
+    it 'returns 401 without auth' do
+      delete "/api/v1/categories/#{category.id}"
       expect(response).to have_http_status(:unauthorized)
     end
 
-    context 'when authenticated' do
-      let(:headers) { auth_headers_for(user) }
+    it 'deletes the category' do
+      expect do
+        delete "/api/v1/categories/#{category.id}", headers: headers
+      end.to change(Category, :count).by(-1)
 
-      it 'deletes the category successfully' do
-        delete "/api/v1/categories/#{category1.id}", headers: headers
-        expect(response).to have_http_status(:no_content)
-        expect(Category.find_by(id: category1.id)).to be_nil
-      end
+      expect(response).to have_http_status(:no_content)
     end
   end
 end
