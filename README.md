@@ -109,7 +109,7 @@ This project uses **GitHub Actions** for automated testing and code quality assu
 
 **Pipeline Features:**
 - **PostgreSQL 15** database service for realistic testing
-- **Ruby 3.1.2** environment setup
+- **Ruby 3.3.4** environment setup
 - **RuboCop** code style and quality checks
 - **RSpec** comprehensive test suite
 - **Automated** on every push and pull request to `main`
@@ -119,14 +119,14 @@ All code changes must pass CI checks before merging to maintain code quality and
 ## Tech Stack
 
 ### Backend
-- Ruby 3.1.2+
+- Ruby 3.3.4
 - Ruby on Rails 7.1.0+ (API-only)
 - PostgreSQL
 - REST API
 
 ### Authentication & Authorization
-- Devise
-- Devise-JWT (JWT token authentication)
+- `has_secure_password` (bcrypt)
+- `jwt` gem (hand-rolled JWT with denylist revocation)
 - CanCanCan
 
 ### API Documentation
@@ -191,7 +191,7 @@ Budget warnings are returned in the transaction creation response:
 ## Status
 
 🚧 Work in Progress
-- ✅ User authentication (Devise)
+- ✅ User authentication (has_secure_password + JWT)
 - ✅ Categories CRUD
 - ✅ Budgets CRUD
 - ✅ Transactions Create & Read
@@ -204,7 +204,6 @@ Budget warnings are returned in the transaction creation response:
 - ✅ Budget monitoring and warnings
 - ✅ Docker containerization
 - ✅ RuboCop code linting
-- ✅ JWT-Devise
 - ✅ Swagger API documentation
 - ✅ GitHub Actions CI/CD pipeline
 - 🔄 Budget monitoring optimization
