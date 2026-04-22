@@ -3,18 +3,8 @@ require 'rails_helper'
 RSpec.describe "Api::V1::Budgets", type: :request do
   let!(:user) { create(:user) }
   let!(:category) { create(:category, user: user) }
-  let!(:budget1) { Budget.create!(
-    user: user,
-    monthly_limit: '1000',
-    category: category,
-    month: '2023-01-01'
-  ) }
-  let!(:budget2) { Budget.create!(
-    user: user,
-    monthly_limit: '2000',
-    category: category,
-    month: '2023-02-01'
-  ) }
+  let!(:budget1) { create(:budget, user: user, category: category, monthly_limit: 1000, month: '2023-01-01') }
+  let!(:budget2) { create(:budget, user: user, category: category, monthly_limit: 2000, month: '2023-02-01') }
 
   describe "GET /api/v1/budgets" do
     it 'returns 401 when not authenticated' do
@@ -46,13 +36,8 @@ RSpec.describe "Api::V1::Budgets", type: :request do
       end
 
       it 'filters budgets by category' do
-        other_category = Category.create!(name: 'Books', user: user)
-        Budget.create!(
-          user: user,
-          monthly_limit: '100',
-          category: other_category,
-          month: '2023-02-01'
-        )
+        other_category = create(:category, user: user, name: 'Books')
+        create(:budget, user: user, category: other_category, monthly_limit: 100, month: '2023-02-01')
         get "/api/v1/budgets?q[category_id_eq]=#{category.id}", headers: headers
         json_response = JSON.parse(response.body)
         expect(json_response.length).to eq(2)

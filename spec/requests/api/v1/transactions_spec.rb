@@ -3,22 +3,8 @@ require 'rails_helper'
 RSpec.describe "Api::V1::Transactions", type: :request do
   let!(:user) { create(:user) }
   let!(:category) { create(:category, user: user, name: 'Electronics') }
-  let!(:transaction1) { Transaction.create!(
-    title: 'Laptop',
-    user: user,
-    category: category,
-    amount: 2000,
-    date: '2025-01-15',
-    transaction_type: 'expense',
-  ) }
-  let!(:transaction2) { Transaction.create!(
-    title: 'PC',
-    user: user,
-    category: category,
-    amount: 1500,
-    date: '2025-03-15',
-    transaction_type: 'expense',
-  ) }
+  let!(:transaction1) { create(:transaction, user: user, category: category, title: 'Laptop', amount: 2000, date: '2025-01-15') }
+  let!(:transaction2) { create(:transaction, user: user, category: category, title: 'PC', amount: 1500, date: '2025-03-15') }
 
   describe "GET /api/v1/transactions" do
     it 'returns 401 when not authenticated' do
@@ -118,27 +104,12 @@ RSpec.describe "Api::V1::Transactions", type: :request do
 
       context 'budget warnings' do
         let(:budget_category) { create(:category, user: user) }
-        let(:budget) { Budget.create(category: budget_category, user: user, monthly_limit: 1000, month: Date.current.beginning_of_month) }
+        let!(:budget) { create(:budget, user: user, category: budget_category, monthly_limit: 1000) }
 
         context 'when budget is exceeded' do
           before do
-            Transaction.create!(
-              title: 'Existing expense 1',
-              user: user,
-              category: budget_category,
-              amount: 500,
-              date: Date.current,
-              transaction_type: 'expense'
-            )
-            Transaction.create!(
-              title: 'Existing expense 2',
-              user: user,
-              category: budget_category,
-              amount: 300,
-              date: Date.current,
-              transaction_type: 'expense'
-            )
-            budget
+            create(:transaction, :expense, user: user, category: budget_category, amount: 500, date: Date.current)
+            create(:transaction, :expense, user: user, category: budget_category, amount: 300, date: Date.current)
           end
 
           it 'warns when budget is exceeded' do
