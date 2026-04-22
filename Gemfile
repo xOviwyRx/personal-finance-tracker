@@ -16,8 +16,8 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'rack-cors'
 
 # Authentication & Authorization
-gem 'devise'
-gem 'devise-jwt'
+gem 'bcrypt', '~> 3.1'
+gem 'jwt', '~> 2.8'
 gem 'cancancan'
 
 # Search functionality
