@@ -1,6 +1,6 @@
 module AuthHelpers
   def auth_headers_for(user)
-    token = Warden::JWTAuth::UserEncoder.new.call(user, :user, nil).first
+    token = JwtService.encode(user)
     { Authorization: "Bearer #{token}" }
   end
 end

@@ -1,42 +1,40 @@
 class ApplicationController < ActionController::API
-    before_action :authenticate_user!
-    include CanCan::ControllerAdditions
-    rescue_from CanCan::AccessDenied do |exception|
-        render json: { error: 'Access denied' }, status: :forbidden
-    end
-    rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+  include CanCan::ControllerAdditions
+
+  before_action :authenticate_user!
+
+  rescue_from CanCan::AccessDenied do
+    render json: { error: 'Access denied' }, status: :forbidden
+  end
+
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+
+  attr_reader :current_user
 
   private
 
-    def authenticate_user!
-        token = token_from_request
-        return render json: { error: 'Missing token' }, status: :unauthorized unless token
+  def authenticate_user!
+    payload = JwtService.decode(bearer_token)
+    return render_unauthorized('Invalid token') unless payload
+    return render_unauthorized('Token has been revoked') if JwtDenylist.exists?(jti: payload['jti'])
 
-        begin
-            decoded_token = Warden::JWTAuth::TokenDecoder.new.call(token)
-            jti = decoded_token['jti']
-            user_id = decoded_token['sub']
-            return render json: { error: 'Token has been revoked' }, status: :unauthorized if JwtDenylist.exists?(jti: jti)
+    @current_user = User.find_by(id: payload['sub'])
+    render_unauthorized('Invalid token') unless @current_user
+  end
 
-            @current_user = User.find(user_id)
-        rescue JWT::DecodeError, ActiveRecord::RecordNotFound
-            render json: { error: 'Invalid token' }, status: :unauthorized
-        end
-    end
+  def current_ability
+    @current_ability ||= ::Ability.new(current_user)
+  end
 
-    attr_reader :current_user
+  def bearer_token
+    request.headers['Authorization']&.sub(/^Bearer /, '')
+  end
 
-    def current_ability
-        @current_ability ||= ::Ability.new(current_user)
-    end
+  def render_unauthorized(message)
+    render json: { error: message }, status: :unauthorized
+  end
 
-    def token_from_request
-        pattern = /^Bearer /
-        header = request.headers['Authorization']
-        header.gsub(pattern, '') if header&.match(pattern)
-    end
-
-    def record_not_found(_exception)
-        render json: { error: 'Record not found' }, status: :not_found
-    end
+  def record_not_found(_exception)
+    render json: { error: 'Record not found' }, status: :not_found
+  end
 end
