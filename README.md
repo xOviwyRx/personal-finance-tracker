@@ -120,7 +120,10 @@ GitHub Actions runs RuboCop and RSpec against PostgreSQL 15 on every push and pu
 
 ### Transactions
 - `GET /api/v1/transactions` - List all transactions
+- `GET /api/v1/transactions/:id` - Get a single transaction
 - `POST /api/v1/transactions` - Create a new transaction
+- `PUT /api/v1/transactions/:id` - Update a transaction
+- `DELETE /api/v1/transactions/:id` - Delete a transaction
 
 ## Features
 
