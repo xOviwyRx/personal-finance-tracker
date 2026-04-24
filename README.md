@@ -4,6 +4,10 @@ A REST API for tracking personal finances with category-based monthly budgets an
 
 ## Table of Contents
 
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+   - [Budget Monitoring](#budget-monitoring)
+   - [Monthly Reports](#monthly-reports)
 - [Getting Started](#getting-started)
 - [Testing the API](#testing-the-api)
    - [Swagger UI Documentation](#swagger-ui-documentation)
@@ -11,15 +15,76 @@ A REST API for tracking personal finances with category-based monthly budgets an
 - [Development](#development)
    - [Code Quality & Testing](#code-quality--testing)
    - [Continuous Integration](#continuous-integration)
-- [Tech Stack](#tech-stack)
 - [API Endpoints](#api-endpoints)
    - [Authentication](#authentication)
    - [Categories](#categories)
    - [Budgets](#budgets)
    - [Transactions](#transactions)
-- [Features](#features)
-   - [Budget Monitoring](#budget-monitoring)
+   - [Reports](#reports)
 - [Roadmap](#roadmap)
+
+## Tech Stack
+
+### Backend
+- Ruby 3.3.4
+- Ruby on Rails 7.1
+- PostgreSQL
+- REST API
+
+### Authentication & Authorization
+- `has_secure_password` (bcrypt)
+- `jwt` gem (hand-rolled JWT with denylist revocation)
+- CanCanCan
+
+### API Documentation
+- Swagger UI
+- RSwag
+
+### Search & Utilities
+- Ransack
+
+### Testing & Code Quality
+- RSpec
+- RuboCop
+
+### DevOps & Deployment
+- Docker & Docker Compose
+- GitHub Actions CI/CD
+
+## Features
+
+### Budget Monitoring
+The API includes real-time budget monitoring that provides warnings when creating expense transactions:
+
+- **Budget Exceeded**: Warns when the monthly budget limit is exceeded, showing the overage amount
+- **Budget Limit Reached**: Notifies when exactly at the budget limit
+- **Approaching Limit**: Alerts when expenses reach 75% of the monthly budget limit
+
+Budget warnings are returned in the transaction creation response:
+```json
+{
+  "transaction": { },
+  "warnings": [
+    "You have exceeded the budget limit for category 'Food' by 50.0."
+  ]
+}
+```
+
+*Note: The current budget monitoring implementation will be optimized for better performance in future iterations.*
+
+### Monthly Reports
+
+Aggregated spending summary for a given month. Returns total income, total expenses, and net for the user's transactions (defaults to current month if no `month` parameter is provided).
+
+Example response:
+```json
+{
+  "month": "2026-04",
+  "total_income": "3000.0",
+  "total_expenses": "2450.0",
+  "net": "550.0"
+}
+```
 
 ## Getting Started
 
@@ -71,34 +136,6 @@ docker-compose exec web rspec
 
 GitHub Actions runs RuboCop and RSpec against PostgreSQL 15 on every push and pull request to `main`.
 
-## Tech Stack
-
-### Backend
-- Ruby 3.3.4
-- Ruby on Rails 7.1.0+ (API-only)
-- PostgreSQL
-- REST API
-
-### Authentication & Authorization
-- `has_secure_password` (bcrypt)
-- `jwt` gem (hand-rolled JWT with denylist revocation)
-- CanCanCan
-
-### API Documentation
-- Swagger UI
-- RSwag
-
-### Search & Utilities
-- Ransack
-
-### Testing & Code Quality
-- RSpec
-- RuboCop
-
-### DevOps & Deployment
-- Docker & Docker Compose
-- GitHub Actions CI/CD
-
 ## API Endpoints
 
 ### Authentication
@@ -125,31 +162,13 @@ GitHub Actions runs RuboCop and RSpec against PostgreSQL 15 on every push and pu
 - `PUT /api/v1/transactions/:id` - Update a transaction
 - `DELETE /api/v1/transactions/:id` - Delete a transaction
 
-## Features
-
-### Budget Monitoring
-The API includes real-time budget monitoring that provides warnings when creating expense transactions:
-
-- **Budget Exceeded**: Warns when the monthly budget limit is exceeded, showing the overage amount
-- **Budget Limit Reached**: Notifies when exactly at the budget limit
-- **Approaching Limit**: Alerts when expenses reach 75% of the monthly budget limit
-
-Budget warnings are returned in the transaction creation response:
-```json
-{
-  "transaction": { },
-  "warnings": [
-    "You have exceeded the budget limit for category 'Food' by 50.0."
-  ]
-}
-```
-
-*Note: The current budget monitoring implementation will be optimized for better performance in future iterations.*
+### Reports
+- `GET /api/v1/reports/monthly` - Monthly spending summary (accepts optional `?month=YYYY-MM`, defaults to current month)
 
 ## Roadmap
 
 Potential improvements for future iterations:
-- Monthly spending reports with category breakdown
+- Category breakdown in monthly spending reports
 - Recurring transactions (rent, subscriptions)
 - Multi-currency support
 - Background processing for budget warnings to reduce request-time cost
