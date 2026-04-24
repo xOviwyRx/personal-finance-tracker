@@ -12,6 +12,8 @@ Rails.application.routes.draw do
       resources :transactions
       resources :budgets
       resources :categories
+
+      get 'reports/monthly', to: 'reports#monthly'
     end
   end
 
