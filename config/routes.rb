@@ -17,5 +17,5 @@ Rails.application.routes.draw do
     end
   end
 
-  root to: "api/v1/transactions#index"
+  root to: redirect('/api-docs')
 end
