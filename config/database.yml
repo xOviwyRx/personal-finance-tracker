@@ -84,6 +84,4 @@ test:
 #
 production:
   <<: *default
-  database: personal_finance_tracker_production
-  username: personal_finance_tracker
-  password: <%= ENV['PERSONAL_FINANCE_TRACKER_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
