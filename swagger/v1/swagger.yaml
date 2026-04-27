@@ -416,6 +416,58 @@ paths:
                     type: string
                     example: Category cannot be deleted because it has associated
                       transactions
+  "/reports/monthly":
+    get:
+      summary: monthly spending summary
+      tags:
+      - Reports
+      parameters:
+      - name: month
+        in: query
+        required: false
+        description: Month in YYYY-MM format. Defaults to current month if omitted.
+        example: 2026-04
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  month:
+                    type: string
+                    example: 2026-04
+                  total_income:
+                    type: string
+                    example: '3000.0'
+                  total_expenses:
+                    type: string
+                    example: '2450.0'
+                  net:
+                    type: string
+                    example: '550.0'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid month format. Use YYYY-MM.
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   "/transactions":
     get:
       summary: list transactions
@@ -538,6 +590,171 @@ paths:
               - category_id
               - transaction_type
               - title
+  "/transactions/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Transaction ID
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: show transaction
+      tags:
+      - Transactions
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  amount:
+                    type: string
+                  title:
+                    type: string
+                  date:
+                    type: string
+                    format: date
+                  transaction_type:
+                    type: string
+                  category_id:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: datetime
+                  updated_at:
+                    type: string
+                    format: datetime
+                  user_id:
+                    type: integer
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    put:
+      summary: update transaction
+      tags:
+      - Transactions
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      title:
+                        type: string
+                      amount:
+                        type: string
+                      transaction_type:
+                        type: string
+                      category_id:
+                        type: integer
+                      created_at:
+                        type: string
+                        format: datetime
+                      updated_at:
+                        type: string
+                        format: datetime
+                      user_id:
+                        type: integer
+                  warnings:
+                    type: array
+                    items:
+                      type: string
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: string
+                category_id:
+                  type: integer
+                transaction_type:
+                  type: string
+                title:
+                  type: string
+    delete:
+      summary: delete transaction
+      tags:
+      - Transactions
+      responses:
+        '204':
+          description: no content
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   "/users/sign_in":
     post:
       summary: sign in
