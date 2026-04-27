@@ -23,14 +23,7 @@ RSpec.configure do |config|
       },
       paths: {},
       servers: [
-        {
-          url: 'http://{defaultHost}/api/v1',
-          variables: {
-            defaultHost: {
-              default: 'localhost:3000'
-            }
-          }
-        }
+        { url: '/api/v1' }
       ],
       tags: [
         {

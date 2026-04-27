@@ -680,10 +680,7 @@ paths:
                   error:
                     type: string
 servers:
-- url: http://{defaultHost}/api/v1
-  variables:
-    defaultHost:
-      default: localhost:3000
+- url: "/api/v1"
 tags:
 - name: Authentication
   description: User authentication endpoints
