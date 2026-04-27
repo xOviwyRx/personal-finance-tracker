@@ -40,12 +40,15 @@ group :development do
   gem 'rubocop-performance'
 end
 
+gem 'rswag-api'
+gem 'rswag-ui'
+
 # Development and test group
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails'
   gem 'factory_bot_rails'
-  gem 'rswag'
+  gem 'rswag-specs'
 end
 
 # Platform specific
