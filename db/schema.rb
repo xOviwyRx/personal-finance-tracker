@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_04_22_000000) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_11_161704) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,7 +27,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_22_000000) do
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
@@ -54,6 +54,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_04_22_000000) do
     t.index ["category_id"], name: "index_transactions_on_category_id"
     t.index ["user_id", "category_id", "date", "transaction_type"], name: "index_transactions_on_user_category_date_and_type"
     t.index ["user_id"], name: "index_transactions_on_user_id"
+    t.check_constraint "amount > 0::numeric", name: "transactions_amount_positive"
+    t.check_constraint "transaction_type::text = ANY (ARRAY['income'::character varying, 'expense'::character varying]::text[])", name: "transactions_type_check"
   end
 
   create_table "users", force: :cascade do |t|
