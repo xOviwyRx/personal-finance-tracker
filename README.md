@@ -75,7 +75,7 @@ Budget warnings are returned in the transaction creation response:
 
 ### Monthly Reports
 
-Aggregated spending summary for a given month. Returns total income, total expenses, and net for the user's transactions (defaults to current month if no `month` parameter is provided).
+Aggregated spending summary for a given month. Returns total income, total expenses, net, and an expense breakdown grouped by category for the user's transactions (defaults to current month if no `month` parameter is provided).
 
 Example response:
 ```json
@@ -83,7 +83,12 @@ Example response:
   "month": "2026-04",
   "total_income": "3000.0",
   "total_expenses": "2450.0",
-  "net": "550.0"
+  "net": "550.0",
+  "category_breakdown": {
+    "Groceries": "820.0",
+    "Rent": "1500.0",
+    "Transport": "130.0"
+  }
 }
 ```
 
@@ -163,12 +168,11 @@ GitHub Actions runs RuboCop and RSpec against PostgreSQL 15 on every push and pu
 - `DELETE /api/v1/transactions/:id` - Delete a transaction
 
 ### Reports
-- `GET /api/v1/reports/monthly` - Monthly spending summary (accepts optional `?month=YYYY-MM`, defaults to current month)
+- `GET /api/v1/reports/monthly` - Monthly spending summary with per-category expense breakdown (accepts optional `?month=YYYY-MM`, defaults to current month)
 
 ## Roadmap
 
 Potential improvements for future iterations:
-- Category breakdown in monthly spending reports
 - Recurring transactions (rent, subscriptions)
 - Multi-currency support
 - Background processing for budget warnings to reduce request-time cost

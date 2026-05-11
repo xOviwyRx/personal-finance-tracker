@@ -4,6 +4,7 @@ RSpec.describe "Api::V1::Reports", type: :request do
   let(:user) { create(:user) }
   let(:headers) { auth_headers_for(user) }
   let(:category) { create(:category, user: user) }
+  let(:another_category) { create(:category, name: 'Electronics', user: user) }
 
   describe "GET /api/v1/reports/monthly" do
     it 'returns 401 without auth' do
@@ -40,6 +41,18 @@ RSpec.describe "Api::V1::Reports", type: :request do
       it 'returns net' do
         get '/api/v1/reports/monthly?month=2026-04', headers: headers
         expect(response.parsed_body['net'].to_f).to eq(2850)
+      end
+
+      context 'with transactions across multiple categories' do
+        before do
+          create(:transaction, :expense, user: user, category: another_category, amount: 200, date: '2026-04-15')
+        end
+
+        it 'returns split by category' do
+          get '/api/v1/reports/monthly?month=2026-04', headers: headers
+          expect(response.parsed_body['category_breakdown'][category.name].to_f).to eq(150)
+          expect(response.parsed_body['category_breakdown'][another_category.name].to_f).to eq(200)
+        end
       end
     end
   end

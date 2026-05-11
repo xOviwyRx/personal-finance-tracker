@@ -449,6 +449,13 @@ paths:
                   net:
                     type: string
                     example: '550.0'
+                  category_breakdown:
+                    type: object
+                    additionalProperties:
+                      type: string
+                    example:
+                      Groceries: '820.0'
+                      Rent: '1500.0'
         '400':
           description: bad request
           content:

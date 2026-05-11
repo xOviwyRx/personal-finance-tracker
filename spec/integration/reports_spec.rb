@@ -16,7 +16,12 @@ RSpec.describe 'Reports API', type: :request do
                  month: { type: :string, example: '2026-04' },
                  total_income: { type: :string, example: '3000.0' },
                  total_expenses: { type: :string, example: '2450.0' },
-                 net: { type: :string, example: '550.0' }
+                 net: { type: :string, example: '550.0' },
+                 category_breakdown: {
+                   type: :object,
+                   additionalProperties: { type: :string },
+                   example: { 'Groceries' => '820.0', 'Rent' => '1500.0' }
+                 }
                }
         run_test!
       end
