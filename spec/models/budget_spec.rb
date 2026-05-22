@@ -22,4 +22,12 @@ RSpec.describe Budget, type: :model do
   it 'belongs to category' do
     expect(Budget.reflect_on_association(:category).macro).to eq(:belongs_to)
   end
+
+  it 'makes month date as first date of month' do
+    user = create(:user)
+    category = create(:category, user: user)
+
+    budget = Budget.create!(monthly_limit: 10, month: Date.new(2026, 5, 15), user: user, category: category)
+    expect(budget.month).to eq(Date.new(2026, 5, 1))
+  end
 end
