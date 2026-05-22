@@ -2,6 +2,8 @@ class ReplaceDeviseColumnsWithPasswordDigest < ActiveRecord::Migration[7.1]
   def up
     add_column :users, :password_digest, :string
 
+    execute "UPDATE users SET password_digest = encrypted_password"
+
     remove_index :users, :reset_password_token
     remove_column :users, :encrypted_password
     remove_column :users, :reset_password_token
@@ -21,6 +23,8 @@ class ReplaceDeviseColumnsWithPasswordDigest < ActiveRecord::Migration[7.1]
     add_column :users, :reset_password_token, :string
     add_column :users, :encrypted_password, :string, default: '', null: false
     add_index :users, :reset_password_token, unique: true
+
+    execute "UPDATE users SET encrypted_password = password_digest"
 
     remove_column :users, :password_digest
   end
