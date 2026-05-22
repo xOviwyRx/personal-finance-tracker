@@ -16,6 +16,7 @@ A REST API for tracking personal finances with category-based monthly budgets an
 - [Development](#development)
    - [Code Quality & Testing](#code-quality--testing)
    - [Continuous Integration](#continuous-integration)
+   - [Deployment](#deployment)
 - [API Endpoints](#api-endpoints)
    - [Authentication](#authentication)
    - [Categories](#categories)
@@ -140,6 +141,14 @@ docker-compose exec web rspec
 ![CI](https://github.com/xOviwyRx/personal-finance-tracker/workflows/Ruby%20on%20Rails%20CI/badge.svg)
 
 GitHub Actions runs RuboCop and RSpec against PostgreSQL 15 on every push and pull request to `main`.
+
+### Deployment
+
+When deploying the API publicly, set the following environment variable to allow your frontend's origin to call the API from the browser:
+
+| Variable | Description | Example |
+| --- | --- | --- |
+| `FRONTEND_ORIGIN` | Allowed browser origin for CORS (`scheme://host[:port]`, no trailing slash). If unset, defaults to `http://localhost:5173` for local development. | `https://your-frontend.vercel.app` |
 
 ## API Endpoints
 
