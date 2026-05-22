@@ -1,6 +1,6 @@
 class NormalizeBudgetMonths < ActiveRecord::Migration[7.1]
   def up
-    execute <<~SQL
+    execute <<~SQL.squish
       DELETE FROM budgets
       WHERE id NOT IN (
         SELECT MIN(id)
@@ -9,7 +9,7 @@ class NormalizeBudgetMonths < ActiveRecord::Migration[7.1]
       )
     SQL
 
-    execute <<~SQL
+    execute <<~SQL.squish
       UPDATE budgets
       SET month = date_trunc('month', month)::date
       WHERE month <> date_trunc('month', month)::date
