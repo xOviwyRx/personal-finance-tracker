@@ -7,9 +7,6 @@ ruby '3.3.4'
 gem 'rails', '~> 7.1.0'
 gem 'pg', '~> 1.1' # PostgreSQL
 gem 'puma', '~> 6.0' # App server
-gem 'sass-rails', '>= 6' # CSS processing
-gem 'turbolinks', '~> 5'
-gem 'jbuilder', '~> 2.7' # JSON API
 gem 'bootsnap', '>= 1.4.4', require: false
 
 # Cross-Origin Resource Sharing (CORS)
