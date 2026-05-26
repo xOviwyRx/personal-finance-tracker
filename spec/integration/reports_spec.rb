@@ -1,6 +1,10 @@
 require 'swagger_helper'
 
 RSpec.describe 'Reports API', type: :request do
+  let(:user) { create(:user) }
+  let(:Authorization) { "Bearer #{JwtService.encode(user)}" }
+  let(:category) { create(:category, user: user) }
+
   path '/reports/monthly' do
     get('monthly spending summary') do
       tags 'Reports'
@@ -23,6 +27,13 @@ RSpec.describe 'Reports API', type: :request do
                    example: { 'Groceries' => '820.0', 'Rent' => '1500.0' }
                  }
                }
+
+        let(:month) { Date.current.strftime('%Y-%m') }
+        before do
+          create(:transaction, :income, user: user, category: category)
+          create(:transaction, user: user, category: category)
+        end
+
         run_test!
       end
 
@@ -31,6 +42,8 @@ RSpec.describe 'Reports API', type: :request do
                properties: {
                  error: { type: :string, example: 'Invalid month format. Use YYYY-MM.' }
                }
+
+        let(:month) { 'not-a-month' }
         run_test!
       end
 
@@ -39,6 +52,9 @@ RSpec.describe 'Reports API', type: :request do
                properties: {
                  error: { type: :string }
                }
+
+        let(:month) { '2026-04' }
+        let(:Authorization) { nil }
         run_test!
       end
     end

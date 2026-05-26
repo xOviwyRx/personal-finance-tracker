@@ -6,6 +6,24 @@ AllCops:
   NewCops: enable
   SuggestExtensions: false
 
+# rswag integration specs use a DSL (path/get/response/run_test!) that
+# rubocop-rspec doesn't understand as example groups. Its structural and hook
+# cops therefore misfire on them — ScatteredSetup's autocorrect even merges
+# `before` hooks across different response blocks, breaking the specs. Exclude
+# the rswag specs from these cops.
+RSpec/ScatteredSetup:
+  Exclude:
+    - 'spec/integration/**/*'
+RSpec/EmptyLineAfterHook:
+  Exclude:
+    - 'spec/integration/**/*'
+
+# rswag resolves the Bearer security header from a `let(:Authorization)`,
+# so the PascalCase name is required and can't be snake_cased.
+RSpec/VariableName:
+  AllowedPatterns:
+    - '^Authorization$'
+
 Style/ClassAndModuleChildren:
   Enabled: false
 

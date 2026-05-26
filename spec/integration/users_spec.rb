@@ -34,15 +34,19 @@ RSpec.describe 'Authentication API', type: :request do
                    }
                  }
                }
+
+        let(:registered_user) { create(:user, password: 'password123') }
+        let(:user) { { user: { email: registered_user.email, password: 'password123' } } }
         run_test!
       end
 
       response(401, 'invalid credentials') do
         schema type: :object,
                properties: {
-                 error: { type: :string, example: 'Invalid credentials' }
+                 error: { type: :string }
                }
 
+        let(:user) { { user: { email: 'nobody@example.com', password: 'wrong' } } }
         run_test!
       end
     end
@@ -82,6 +86,11 @@ RSpec.describe 'Authentication API', type: :request do
                    }
                  }
                }
+
+        let(:user) do
+          attrs = attributes_for(:user)
+          { user: attrs.merge(password_confirmation: attrs[:password]) }
+        end
         run_test!
       end
 
@@ -95,6 +104,8 @@ RSpec.describe 'Authentication API', type: :request do
                    }
                  }
                }
+
+        let(:user) { { user: { email: 'bad', password: '123', password_confirmation: '123' } } }
         run_test!
       end
     end
@@ -112,6 +123,9 @@ RSpec.describe 'Authentication API', type: :request do
                properties: {
                  message: { type: :string, example: 'Logged out successfully.' }
                }
+
+        let(:auth_user) { create(:user) }
+        let(:Authorization) { "Bearer #{JwtService.encode(auth_user)}" }
         run_test!
       end
 
@@ -121,6 +135,7 @@ RSpec.describe 'Authentication API', type: :request do
                  error: { type: :string }
                }
 
+        let(:Authorization) { nil }
         run_test!
       end
     end
