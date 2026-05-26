@@ -26,8 +26,11 @@ class Api::V1::CategoriesController < ApplicationController
   end
 
   def destroy
-    @category.destroy!
-    head :no_content
+    if @category.destroy
+      head :no_content
+    else
+      render json: { error: @category.errors.full_messages.to_sentence }, status: :unprocessable_entity
+    end
   end
 
   private

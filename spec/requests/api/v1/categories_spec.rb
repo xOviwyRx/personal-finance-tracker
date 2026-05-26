@@ -88,5 +88,15 @@ RSpec.describe "Api::V1::Categories", type: :request do
 
       expect(response).to have_http_status(:no_content)
     end
+
+    it 'does not delete a category that has transactions' do
+      create(:transaction, user: user, category: category)
+
+      expect do
+        delete "/api/v1/categories/#{category.id}", headers: headers
+      end.not_to change(Category, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 end

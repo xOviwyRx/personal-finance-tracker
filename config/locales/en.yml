@@ -31,3 +31,11 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    errors:
+      models:
+        category:
+          attributes:
+            base:
+              restrict_dependent_destroy:
+                has_many: "Category cannot be deleted because it has associated transactions"
