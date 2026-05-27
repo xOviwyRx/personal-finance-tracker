@@ -9,6 +9,7 @@ A REST API for tracking personal finances with category-based monthly budgets an
 - [Tech Stack](#tech-stack)
 - [Features](#features)
    - [Budget Monitoring](#budget-monitoring)
+   - [Budget Alert Emails](#budget-alert-emails)
    - [Monthly Reports](#monthly-reports)
 - [Getting Started](#getting-started)
 - [Live Demo](#live-demo)
@@ -45,6 +46,10 @@ A REST API for tracking personal finances with category-based monthly budgets an
 ### Search & Utilities
 - Ransack
 
+### Background Jobs & Email
+- Sidekiq + Redis
+- Action Mailer (Resend SMTP)
+
 ### Testing & Code Quality
 - RSpec
 - RuboCop
@@ -73,6 +78,13 @@ Budget warnings are returned in the transaction creation response:
 ```
 
 *Note: The current budget monitoring implementation will be optimized for better performance in future iterations.*
+
+### Budget Alert Emails
+
+Alongside the in-response warnings above, the API emails the user when an expense pushes a category's monthly spending into a new budget tier. The email is delivered from a background job:
+
+- **Approaching (75%)** and **Exceeded (100%)** each trigger an email.
+- Alerts fire **at most once per tier per month** — logging more expenses at the same tier does not re-send.
 
 ### Monthly Reports
 
@@ -149,6 +161,9 @@ When deploying the API publicly, set the following environment variable to allow
 | Variable | Description | Example |
 | --- | --- | --- |
 | `FRONTEND_ORIGIN` | Allowed browser origin for CORS (`scheme://host[:port]`, no trailing slash). If unset, defaults to `http://localhost:5173` for local development. | `https://your-frontend.vercel.app` |
+| `REDIS_URL` | Redis connection used by Sidekiq for background jobs. Defaults to `redis://localhost:6379/0`. | `redis://default:pass@host:6379` |
+| `RESEND_API_KEY` | API key used to send budget-alert emails via Resend SMTP. | `re_xxxxxxxx` |
+| `MAILER_FROM` | From address for outgoing email; must be a Resend-verified sender (or `onboarding@resend.dev` for testing). | `alerts@yourdomain.com` |
 
 ## API Endpoints
 
@@ -184,4 +199,3 @@ When deploying the API publicly, set the following environment variable to allow
 Potential improvements for future iterations:
 - Recurring transactions (rent, subscriptions)
 - Multi-currency support
-- Background processing for budget warnings to reduce request-time cost

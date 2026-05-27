@@ -1,0 +1,11 @@
+Hi,
+
+<% if @budget.alert_exceeded? -%>
+You've reached your monthly budget of <%= @limit %> for "<%= @category.name %>".
+<% else -%>
+You're approaching your monthly budget of <%= @limit %> for "<%= @category.name %>".
+<% end -%>
+
+Log in to review your spending for this category.
+
+— Personal Finance Tracker

@@ -11,21 +11,37 @@ class BudgetWarningService
   def generate_warnings
     return [] unless @transaction.expense?
 
-    budget = find_current_budget
+    budget = current_budget
     return [] unless budget
 
     total_expenses = calculate_total_category_expenses
     build_warnings(budget, total_expenses)
   end
 
-  private
+  def alert_status
+    return :none unless @transaction.expense?
 
-  def find_current_budget
-    @user.budgets.find_by(
+    budget = current_budget
+    return :none unless budget
+
+    total = calculate_total_category_expenses
+    if total >= budget.monthly_limit
+      :exceeded
+    elsif total > budget.monthly_limit * APPROACHING_THRESHOLD
+      :approaching
+    else
+      :none
+    end
+  end
+
+  def current_budget
+    @current_budget ||= @user.budgets.find_by(
       category: @category,
       month: Date.current.beginning_of_month
     )
   end
+
+  private
 
   def calculate_total_category_expenses
     @user.transactions

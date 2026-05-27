@@ -10,6 +10,8 @@ class Transaction < ApplicationRecord
 
   validate :category_belongs_to_user
 
+  after_commit :enqueue_budget_alert, on: [:create, :update]
+
   scope :expenses, -> { where(transaction_type: 'expense') }
   scope :current_month, -> {
     where(date: Date.current.all_month)
@@ -20,6 +22,10 @@ class Transaction < ApplicationRecord
   end
 
   private
+
+  def enqueue_budget_alert
+    BudgetAlertJob.perform_later(id)
+  end
 
   def set_default_date
     self.date ||= Date.current
