@@ -6,8 +6,22 @@ services:
       - "3000:3000"
     depends_on:
       - db
+      - redis
     environment:
       DATABASE_URL: postgresql://postgres:password@db:5432/finance_tracker_development
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - .:/app
+
+  sidekiq:
+    build: .
+    command: bundle exec sidekiq
+    depends_on:
+      - db
+      - redis
+    environment:
+      DATABASE_URL: postgresql://postgres:password@db:5432/finance_tracker_development
+      REDIS_URL: redis://redis:6379/0
     volumes:
       - .:/app
 
@@ -21,5 +35,13 @@ services:
     ports:
       - "5432:5432"
 
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
 volumes:
   postgres_data:
+  redis_data:
