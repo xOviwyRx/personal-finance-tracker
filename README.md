@@ -2,8 +2,6 @@
 
 A REST API for tracking personal finances with category-based monthly budgets and real-time warnings when transactions approach or exceed their limits.
 
-> **Live demo:** https://personal-finance-tracker-production-bd6c.up.railway.app — try it now in your browser
-
 ## Table of Contents
 
 - [Tech Stack](#tech-stack)
@@ -12,7 +10,7 @@ A REST API for tracking personal finances with category-based monthly budgets an
    - [Budget Alert Emails](#budget-alert-emails)
    - [Monthly Reports](#monthly-reports)
 - [Getting Started](#getting-started)
-- [Live Demo](#live-demo)
+- [Interactive API Docs](#interactive-api-docs)
    - [Authentication Flow](#authentication-flow)
 - [Development](#development)
    - [Code Quality & Testing](#code-quality--testing)
@@ -123,11 +121,9 @@ Example response:
    docker-compose exec web rails db:create db:migrate
    ```
 
-## Live Demo
+## Interactive API Docs
 
-Try it now: https://personal-finance-tracker-production-bd6c.up.railway.app
-
-The root URL redirects to interactive Swagger UI where you can test all endpoints directly from the browser. The same Swagger UI is available locally at http://localhost:3000/api-docs.
+The API ships with interactive Swagger UI. Run it locally (see [Getting Started](#getting-started)) and open http://localhost:3000/api-docs — the root URL redirects there. You can authorize and exercise every endpoint from the browser.
 
 ![Swagger UI Screenshot](docs/swagger-ui.png)
 
