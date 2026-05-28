@@ -75,8 +75,6 @@ Budget warnings are returned in the transaction creation response:
 }
 ```
 
-*Note: The current budget monitoring implementation will be optimized for better performance in future iterations.*
-
 ### Budget Alert Emails
 
 Alongside the in-response warnings above, the API emails the user when an expense pushes a category's monthly spending into a new budget tier. The email is delivered from a background job:
@@ -152,7 +150,7 @@ GitHub Actions runs RuboCop and RSpec against PostgreSQL 15 on every push and pu
 
 ### Deployment
 
-When deploying the API publicly, set the following environment variable to allow your frontend's origin to call the API from the browser:
+When deploying the API publicly, set the following environment variables:
 
 | Variable | Description | Example |
 | --- | --- | --- |
