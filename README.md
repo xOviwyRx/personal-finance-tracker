@@ -1,6 +1,6 @@
 # Personal Finance Tracker API
 
-A REST API for tracking personal finances with category-based monthly budgets and real-time warnings when transactions approach or exceed their limits.
+A REST API for tracking personal finances with category-based monthly budgets, real-time and email alerts when spending nears its limits, recurring transactions, and monthly reports.
 
 ## Table of Contents
 
