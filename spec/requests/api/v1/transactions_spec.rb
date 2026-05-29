@@ -114,11 +114,11 @@ RSpec.describe "Api::V1::Transactions", type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    it "denies access to another user's transaction" do
+    it "hides another user's transaction behind a 404" do
       other_transaction = create(:transaction)
 
       get "/api/v1/transactions/#{other_transaction.id}", headers: headers
-      expect(response).to have_http_status(:forbidden)
+      expect(response).to have_http_status(:not_found)
     end
   end
 

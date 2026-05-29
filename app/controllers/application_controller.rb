@@ -3,10 +3,7 @@ class ApplicationController < ActionController::API
 
   before_action :authenticate_user!
 
-  rescue_from CanCan::AccessDenied do
-    render json: { error: 'Access denied' }, status: :forbidden
-  end
-
+  rescue_from CanCan::AccessDenied, with: :record_not_found
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   attr_reader :current_user
