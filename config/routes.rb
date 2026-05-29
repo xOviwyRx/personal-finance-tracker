@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :transactions
       resources :budgets
       resources :categories
+      resources :recurring_transactions
 
       get 'reports/monthly', to: 'reports#monthly'
     end

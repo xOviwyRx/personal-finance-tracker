@@ -416,6 +416,228 @@ paths:
                     type: string
                     example: Category cannot be deleted because it has associated
                       transactions
+  "/recurring_transactions":
+    get:
+      summary: list recurring transactions
+      tags:
+      - Recurring Transactions
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    user_id:
+                      type: integer
+                    category_id:
+                      type: integer
+                    title:
+                      type: string
+                    amount:
+                      type: string
+                    transaction_type:
+                      type: string
+                    start_on:
+                      type: string
+                      format: date
+                    next_run_on:
+                      type: string
+                      format: date
+                    active:
+                      type: boolean
+                    created_at:
+                      type: string
+                      format: datetime
+                    updated_at:
+                      type: string
+                      format: datetime
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    post:
+      summary: create recurring transaction
+      tags:
+      - Recurring Transactions
+      parameters: []
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  category_id:
+                    type: integer
+                  title:
+                    type: string
+                  amount:
+                    type: string
+                  transaction_type:
+                    type: string
+                  start_on:
+                    type: string
+                    format: date
+                  next_run_on:
+                    type: string
+                    format: date
+                  active:
+                    type: boolean
+                  created_at:
+                    type: string
+                    format: datetime
+                  updated_at:
+                    type: string
+                    format: datetime
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                amount:
+                  type: number
+                transaction_type:
+                  type: string
+                  enum:
+                  - income
+                  - expense
+                category_id:
+                  type: integer
+                start_on:
+                  type: string
+                  format: date
+                active:
+                  type: boolean
+              required:
+              - title
+              - amount
+              - transaction_type
+              - category_id
+              - start_on
+  "/recurring_transactions/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Recurring transaction ID
+      required: true
+      schema:
+        type: integer
+    put:
+      summary: update recurring transaction
+      tags:
+      - Recurring Transactions
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  user_id:
+                    type: integer
+                  category_id:
+                    type: integer
+                  title:
+                    type: string
+                  amount:
+                    type: string
+                  transaction_type:
+                    type: string
+                  start_on:
+                    type: string
+                    format: date
+                  next_run_on:
+                    type: string
+                    format: date
+                  active:
+                    type: boolean
+                  created_at:
+                    type: string
+                    format: datetime
+                  updated_at:
+                    type: string
+                    format: datetime
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                amount:
+                  type: number
+                transaction_type:
+                  type: string
+                  enum:
+                  - income
+                  - expense
+                category_id:
+                  type: integer
+                start_on:
+                  type: string
+                  format: date
+                active:
+                  type: boolean
+    delete:
+      summary: delete recurring transaction
+      tags:
+      - Recurring Transactions
+      responses:
+        '204':
+          description: no content
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   "/reports/monthly":
     get:
       summary: monthly spending summary

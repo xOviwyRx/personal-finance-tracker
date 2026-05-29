@@ -10,6 +10,7 @@ class Ability
       can :manage, Budget, user: user
       can :manage, Category, user: user
       can :manage, Transaction, user: user
+      can :manage, RecurringTransaction, user: user
     end
   end
 end

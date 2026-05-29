@@ -8,6 +8,7 @@ A REST API for tracking personal finances with category-based monthly budgets an
 - [Features](#features)
    - [Budget Monitoring](#budget-monitoring)
    - [Budget Alert Emails](#budget-alert-emails)
+   - [Recurring Transactions](#recurring-transactions)
    - [Monthly Reports](#monthly-reports)
 - [Getting Started](#getting-started)
 - [Interactive API Docs](#interactive-api-docs)
@@ -21,6 +22,7 @@ A REST API for tracking personal finances with category-based monthly budgets an
    - [Categories](#categories)
    - [Budgets](#budgets)
    - [Transactions](#transactions)
+   - [Recurring Transactions](#recurring-transactions-1)
    - [Reports](#reports)
 - [Roadmap](#roadmap)
 
@@ -81,6 +83,15 @@ Alongside the in-response warnings above, the API emails the user when an expens
 
 - **Approaching (75%)** and **Exceeded (100%)** each trigger an email.
 - Alerts fire **at most once per tier per month** — logging more expenses at the same tier does not re-send.
+
+### Recurring Transactions
+
+Rules that automatically generate transactions on a monthly schedule — rent, salary, subscriptions. Each rule stores a title, amount, type, category, and a start date, and tracks the date of its next run.
+
+- A daily background job creates the due transactions and advances each rule to its next run.
+- Generated transactions are linked back to their rule and feed budget monitoring like any other transaction.
+- If the worker is down for a stretch, the rule skips the missed periods and resumes from the current month — it does not backfill.
+- Rules can be paused (`active: false`) and resumed at any time.
 
 ### Monthly Reports
 
@@ -185,11 +196,16 @@ When deploying the API publicly, set the following environment variables:
 - `PUT /api/v1/transactions/:id` - Update a transaction
 - `DELETE /api/v1/transactions/:id` - Delete a transaction
 
+### Recurring Transactions
+- `GET /api/v1/recurring_transactions` - List all recurring transaction rules
+- `POST /api/v1/recurring_transactions` - Create a new rule
+- `PUT /api/v1/recurring_transactions/:id` - Update a rule (e.g. pause with `active: false`)
+- `DELETE /api/v1/recurring_transactions/:id` - Delete a rule
+
 ### Reports
 - `GET /api/v1/reports/monthly` - Monthly spending summary with per-category expense breakdown (accepts optional `?month=YYYY-MM`, defaults to current month)
 
 ## Roadmap
 
 Potential improvements for future iterations:
-- Recurring transactions (rent, subscriptions)
 - Multi-currency support
