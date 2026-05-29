@@ -26,22 +26,12 @@ RSpec.configure do |config|
         { url: '/api/v1' }
       ],
       tags: [
-        {
-          name: 'Authentication',
-          description: 'User authentication endpoints'
-        },
-        {
-          name: 'Categories',
-          description: 'Category management endpoints'
-        },
-        {
-          name: 'Budgets',
-          description: 'Budget management endpoints'
-        },
-        {
-          name: 'Transactions',
-          description: 'Transaction management endpoints'
-        }
+        { name: 'Authentication' },
+        { name: 'Categories' },
+        { name: 'Budgets' },
+        { name: 'Transactions' },
+        { name: 'Recurring Transactions' },
+        { name: 'Reports' }
       ],
       components: {
         securitySchemes: {
