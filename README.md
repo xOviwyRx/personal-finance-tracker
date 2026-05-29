@@ -24,7 +24,6 @@ A REST API for tracking personal finances with category-based monthly budgets, r
    - [Transactions](#transactions)
    - [Recurring Transactions](#recurring-transactions-1)
    - [Reports](#reports)
-- [Roadmap](#roadmap)
 
 ## Tech Stack
 
@@ -204,8 +203,3 @@ When deploying the API publicly, set the following environment variables:
 
 ### Reports
 - `GET /api/v1/reports/monthly` - Monthly spending summary with per-category expense breakdown (accepts optional `?month=YYYY-MM`, defaults to current month)
-
-## Roadmap
-
-Potential improvements for future iterations:
-- Multi-currency support
