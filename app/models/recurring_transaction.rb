@@ -10,7 +10,8 @@ class RecurringTransaction < ApplicationRecord
   validates :title, presence: true
   validates :amount, presence: true, numericality: { greater_than: 0 }
   validates :transaction_type, presence: true, inclusion: { in: %w[income expense] }
-  validates :start_on, presence: true
+  validates :start_on, presence: true,
+                       comparison: { greater_than_or_equal_to: -> { Date.current } }, on: :create
 
   scope :due, -> { where(active: true).where(next_run_on: ..Date.current) }
 
@@ -18,6 +19,12 @@ class RecurringTransaction < ApplicationRecord
     month = date.next_month
     day = [start_on.day, month.end_of_month.day].min
     month.change(day: day)
+  end
+
+  def next_future_run
+    date = next_run_on
+    date = next_transaction_date(date) until date > Date.current
+    date
   end
 
   private

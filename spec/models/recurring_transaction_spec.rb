@@ -9,6 +9,10 @@ RSpec.describe RecurringTransaction do
     expect(build(:recurring_transaction, user: user, category: other_category)).not_to be_valid
   end
 
+  it 'rejects a start date in the past' do
+    expect(build(:recurring_transaction, user: user, category: category, start_on: Date.current - 1)).not_to be_valid
+  end
+
   it 'sets next_run_on to start_on on create' do
     rule = create(:recurring_transaction, user: user, category: category, start_on: Date.new(2026, 6, 1))
     expect(rule.next_run_on).to eq(Date.new(2026, 6, 1))
@@ -26,11 +30,10 @@ RSpec.describe RecurringTransaction do
   describe '.due' do
     it 'returns active rules scheduled today or earlier, excluding future and inactive' do
       due_today = create(:recurring_transaction, user: user, category: category, start_on: Date.current)
-      overdue = create(:recurring_transaction, user: user, category: category, start_on: Date.current - 5)
       create(:recurring_transaction, user: user, category: category, start_on: Date.current + 5)
       create(:recurring_transaction, user: user, category: category, start_on: Date.current, active: false)
 
-      expect(RecurringTransaction.due).to contain_exactly(due_today, overdue)
+      expect(RecurringTransaction.due).to contain_exactly(due_today)
     end
   end
 end
