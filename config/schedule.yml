@@ -1,0 +1,4 @@
+generate_recurring_transactions:
+  cron: "0 1 * * *"
+  class: "GenerateRecurringTransactionsJob"
+  queue: default

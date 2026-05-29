@@ -22,6 +22,7 @@ gem 'ransack'
 
 # Background jobs (uses Redis via redis-client)
 gem 'sidekiq', '~> 7.0'
+gem 'sidekiq-cron', '~> 2.0'
 
 # Environment variables
 gem 'dotenv-rails', groups: [:development, :test]
