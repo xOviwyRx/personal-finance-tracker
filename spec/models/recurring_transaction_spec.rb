@@ -14,8 +14,9 @@ RSpec.describe RecurringTransaction do
   end
 
   it 'sets next_run_on to start_on on create' do
-    rule = create(:recurring_transaction, user: user, category: category, start_on: Date.new(2026, 6, 1))
-    expect(rule.next_run_on).to eq(Date.new(2026, 6, 1))
+    start_on = Date.current + 7
+    rule = create(:recurring_transaction, user: user, category: category, start_on: start_on)
+    expect(rule.next_run_on).to eq(start_on)
   end
 
   describe '#next_transaction_date' do
